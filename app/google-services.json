@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "892644936076",
+    "firebase_url": "https://cloakedapp-6cc75.firebaseio.com",
+    "project_id": "cloakedapp-6cc75",
+    "storage_bucket": "cloakedapp-6cc75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892644936076:android:e4ca4cb4fd00d99d",
+        "android_client_info": {
+          "package_name": "kevcon.ie.cloaked"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "892644936076-cnujgih3dipa9n7ia99ihl6cohv42lpr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kevcon.ie.cloaked",
+            "certificate_hash": "3422887a2c64000f1e889904107441fd24ebac54"
+          }
+        },
+        {
+          "client_id": "892644936076-4tjittriu6rl953j894cscf5od4276vr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbYKd-6Dga1qQJNDSB2NOsqMydpchprgo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "892644936076-4tjittriu6rl953j894cscf5od4276vr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
