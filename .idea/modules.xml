@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/CloakedApp.iml" filepath="$PROJECT_DIR$/.idea/CloakedApp.iml" />
-      <module fileurl="file://C:\Users\conor\Documents\College Work\Year_3\CloakedApp\CloakedApp\CloakedApp.iml" filepath="C:\Users\conor\Documents\College Work\Year_3\CloakedApp\CloakedApp\CloakedApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CloakedApp.iml" filepath="$PROJECT_DIR$/CloakedApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\conor\Documents\College Work\Year_3\CloakedApp\CloakedApp\app\app.iml" filepath="C:\Users\conor\Documents\College Work\Year_3\CloakedApp\CloakedApp\app\app.iml" />
     </modules>
   </component>
 </project>
