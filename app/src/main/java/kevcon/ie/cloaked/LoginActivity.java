@@ -30,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -71,6 +72,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     // declared instance of firebase
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //initialize  FireBase auth instance
@@ -98,6 +100,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
+                //if the user is successfully logged the main page is loaded
+                if (user != null) {
+                    //   Intent intent = new Intent(this, MainActivity.class);
+
+                }
             }
         });
 
@@ -327,20 +334,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Log.d(TAG, "signInWithEmail:success");
                             showProgress(false);
                             FirebaseUser user = mAuth.getCurrentUser();
+                           
+                            // display success
+                            Toast.makeText(LoginActivity.this, "Log in Success", Toast.LENGTH_SHORT).show();
+
+                            // navigate user to MainActivity
+                            Intent s = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(s);
+                            //  user = mAuth.getCurrentUser();
                             //     updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             showProgress(false);
-                            // Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                            // display unsuccessful
+                            Toast.makeText(LoginActivity.this, "Log in unsuccessful", Toast.LENGTH_SHORT).show();
                             //         Toast.LENGTH_SHORT).show();
                             // updateUI(null);
                         }
 
-                        // [START_EXCLUDE]
 
-
-                        // [END_EXCLUDE]
                     }
                 });
         // [END sign_in_with_email]
