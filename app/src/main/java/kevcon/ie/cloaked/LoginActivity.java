@@ -334,7 +334,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Log.d(TAG, "signInWithEmail:success");
                             showProgress(false);
                             FirebaseUser user = mAuth.getCurrentUser();
-                           
+
                             // display success
                             Toast.makeText(LoginActivity.this, "Log in Success", Toast.LENGTH_SHORT).show();
 
