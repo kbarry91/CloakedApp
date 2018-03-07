@@ -22,4 +22,9 @@
     </string>
     <string name="title_activity_main">MainActivity</string>
     <string name="settings_activity_main">Settings</string>
+    <string name="contacts_tab">Contacts</string>
+    <string name="message_tab">Message</string>
+    <string name="about_tab">About</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
