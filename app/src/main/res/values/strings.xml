@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Cloaked</string>
 
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="register_email">Enter an Email Address</string>
