@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "892644936076-7pfcak9kb8vnpirtkjea5qlup9tldraj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kevcon.ie.cloaked",
+            "certificate_hash": "0dd8add064fbab745bda0da503b24642bbaf6443"
+          }
+        },
+        {
           "client_id": "892644936076-cnujgih3dipa9n7ia99ihl6cohv42lpr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
