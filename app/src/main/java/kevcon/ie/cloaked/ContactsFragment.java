@@ -34,7 +34,6 @@ public class ContactsFragment extends Fragment{
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
-
             //===============================================================================
             super.onCreate(savedInstanceState);
            // setContentView(R.layout.activity_main);
@@ -42,9 +41,13 @@ public class ContactsFragment extends Fragment{
 
             //===============================================================================
 
-            // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_contacts, container, false);
+            // Inflate the layout for this fragment //changed from activity_main
+            return inflater.inflate(R.layout.contacts_activity_main, container, false);
         }
 
 
-}
+
+}//ContactsFragment
+
+
+

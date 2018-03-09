@@ -1,5 +1,6 @@
 package kevcon.ie.cloaked;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -58,6 +59,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    public void openContacts(View view) {
+        // Do something in response to button
+        Intent intent = new Intent(this, ContactsMainActivity.class);
+        startActivity(intent);
     }
 /*
     @Override

@@ -1,56 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:id="@+id/Relative_details">
 
     <ImageView
-        android:layout_width="600px"
-        android:layout_height="600px"
         android:id="@+id/details_image"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/contact_img"
+        android:src="@drawable/default_avatar" />
 
-        android:layout_centerHorizontal="true" />
-    <!--android:src="@drawable/default_avatar"-->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="30dp"
         android:id="@+id/details_name"
-        android:hint="Name"
-        android:layout_below="@+id/details_image"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true" />
-    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:id="@+id/details_number"
-        android:hint="Number"
-        android:layout_below="@+id/details_name"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_below="@+id/details_image"
+
+        android:textSize="30sp"
+        tools:text="@string/details_name" />
 
     <TextView
+        android:id="@+id/details_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:id="@+id/details_email"
-        android:hint="Email"
-        android:layout_below="@+id/details_number"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_below="@+id/details_name"
+
+        android:textSize="30sp"
+        tools:text="@string/details_number" />
+
+    <TextView
+        android:id="@+id/details_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/details_number"
+
+        android:textSize="30sp"
+        tools:text="@string/details_email" />
 
     <Button
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back To Contact Page"
-        android:id="@+id/backButton"
-        android:background="#000000"
-        android:textColor="#ff0019"
-        android:textStyle="bold"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/details_image"
         android:layout_alignEnd="@+id/details_image"
         android:layout_alignLeft="@+id/details_image"
-        android:layout_alignRight="@+id/details_image" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/details_image"
+        android:layout_alignStart="@+id/details_image"
+        android:background="#000000"
+        android:text="@string/back_contacts"
+        android:textColor="#ff0019"
+        android:textStyle="bold" />
 
 </RelativeLayout>
