@@ -341,7 +341,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             // navigate user to MainActivity
                             Intent s = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(s);
-                            //  user = mAuth.getCurrentUser();
+                            user = mAuth.getCurrentUser();
                             //     updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

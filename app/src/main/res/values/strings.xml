@@ -28,6 +28,9 @@
     <string name="contacts_tab">Contacts</string>
     <string name="message_tab">Message</string>
     <string name="about_tab">About</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Strings for Message list -->
+    <string name="send_button_text">SEND</string>
+    <string name="send_message_hint">Enter Message...</string>
 </resources>
