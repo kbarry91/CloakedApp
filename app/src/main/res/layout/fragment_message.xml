@@ -7,11 +7,21 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/upper_text_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
         android:text="@string/message_tab"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <!--giving error onClick but works (must address at a later stage) -->
+    <Button
+        android:id="@+id/enter_sms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:onClick="openMessages"
+        android:text="@string/enter_send_sms" />
 
 
 </FrameLayout>

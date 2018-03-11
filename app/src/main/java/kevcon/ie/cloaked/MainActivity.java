@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
     public void openContacts(View view) {
         // Do something in response to button
         Intent intent = new Intent(this, ContactsMainActivity.class);
+        startActivity(intent);
+    }
+
+    public void openMessages(View view) {
+        // Do something in response to button
+        Intent intent = new Intent(this, SendMessage.class);
         startActivity(intent);
     }
 /*

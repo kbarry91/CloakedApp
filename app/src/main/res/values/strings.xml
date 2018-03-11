@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Cloaked</string>
 
-    <item name="visible" type="id"/>
-    <item name="masked" type="id"/>
+    <item name="visible" type="id" />
+    <item name="masked" type="id" />
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -42,4 +42,5 @@
     <string name="details_email">Email</string>
     <string name="back_contacts">Back To Contacts Page</string>
     <string name="add_contacts">Add Contact</string>
+    <string name="enter_send_sms">Send SMS</string>
 </resources>
