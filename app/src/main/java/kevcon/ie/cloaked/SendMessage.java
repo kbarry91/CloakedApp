@@ -16,6 +16,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+
 
 /**
  * @author kevin barry
@@ -24,8 +28,14 @@ public class SendMessage extends AppCompatActivity {
     // Tag for debugging
     private static final String TAG = "SendMessage";
 
+    // define UI Components
     private EditText user_message;
     private Button send_button;
+
+    //define message settings
+
+    private FirebaseAuth fAuth;
+    private FirebaseUser fUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +61,18 @@ public class SendMessage extends AppCompatActivity {
         });
     }
 
+    //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
     public void sendSms() {
         Log.d(TAG, "Attempting to send sms");
-        String strPhone = "0857453822";
-        String strMessage = user_message.getText().toString();
+        String strPhone = "0858443049";
+        String strMessage = "sent from cloaked app: " + user_message.getText().toString();
+
+        // populate message object
+        fAuth = FirebaseAuth.getInstance();
+        fUser = fAuth.getCurrentUser();
+
+        // create new message object
+        Message message = new Message(strMessage, fUser, 88888);
         //String strMessage = "Hello this is a debug text";
         SmsManager sms = SmsManager.getDefault();
 
