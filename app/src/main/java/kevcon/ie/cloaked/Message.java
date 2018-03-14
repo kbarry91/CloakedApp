@@ -1,27 +1,29 @@
 package kevcon.ie.cloaked;
 
-import com.google.firebase.auth.FirebaseUser;
-
 /**
  * Created by Intel Build on 09/03/2018.
  */
-
+/*
+Represents a Message
+ */
 public class Message {
-    public String message;
-    FirebaseUser sender;
-    long createdAt;
+    private String message;
+    private String sender;
+    private String body;
+    private int type;
 
     //null constructor
     public Message() {
 
     }
 
-    public Message(String message, FirebaseUser sender, long createdAt) {
+    public Message(String message, String sender, String body, int type) {
+
         this.message = message;
         this.sender = sender;
-        this.createdAt = createdAt;
+        this.body = body;
+        this.type = type;
     }
-    // getter and setters
 
     public String getMessage() {
         return message;
@@ -31,20 +33,30 @@ public class Message {
         this.message = message;
     }
 
-    public FirebaseUser getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(FirebaseUser sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
 
-    public long getCreatedAt() {
-        return createdAt;
+    public String getBody() {
+        return body;
     }
 
-    public void setCreatedAt(long createdAt) {
-        this.createdAt = createdAt;
+    public void setBody(String body) {
+        this.body = body;
     }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+
 }
 
