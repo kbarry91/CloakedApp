@@ -2,16 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="kevcon.ie.cloaked.MessageFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/upper_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/message_tab"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <!--giving error onClick but works (must address at a later stage) -->
     <Button
@@ -23,5 +16,21 @@
         android:onClick="openMessages"
         android:text="@string/enter_send_sms" />
 
+    <Button
+        android:id="@+id/view_sms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:onClick="viewSms"
+        android:text="@string/view_sms" />
+
+    <TextView
+        android:id="@+id/upper_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/message_tab"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </FrameLayout>

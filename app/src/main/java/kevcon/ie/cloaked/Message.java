@@ -1,27 +1,30 @@
 package kevcon.ie.cloaked;
 
-import com.google.firebase.auth.FirebaseUser;
-
 /**
- * Created by Intel Build on 09/03/2018.
+ * <h1>Message</h1>
+ * The Message class represents a sms message
+ *
+ * @author kevin barry
+ * @since 15/3/18
  */
-
 public class Message {
-    public String message;
-    FirebaseUser sender;
-    long createdAt;
+    private String message;
+    private String sender;
+    private String time;
+    private int type;
 
     //null constructor
     public Message() {
 
     }
 
-    public Message(String message, FirebaseUser sender, long createdAt) {
+    public Message(String message, String sender, String time, int type) {
+
         this.message = message;
         this.sender = sender;
-        this.createdAt = createdAt;
+        this.time = time;
+        this.type = type;
     }
-    // getter and setters
 
     public String getMessage() {
         return message;
@@ -31,20 +34,33 @@ public class Message {
         this.message = message;
     }
 
-    public FirebaseUser getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(FirebaseUser sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
 
-    public long getCreatedAt() {
-        return createdAt;
+    public String getTime() {
+        return time;
     }
 
-    public void setCreatedAt(long createdAt) {
-        this.createdAt = createdAt;
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "M:" + message + " S: " + sender + " T: " + type + " D: " + time;
     }
 }
 
