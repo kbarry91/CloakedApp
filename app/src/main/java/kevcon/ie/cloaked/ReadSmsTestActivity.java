@@ -20,7 +20,7 @@ public class ReadSmsTestActivity extends AppCompatActivity {
 
     // a test method to play with reading messages
     public void readSmsTest() {
-        String numberString = "address='+353858443049'";
+        String numberString = "address='0858443049'";
         Cursor cur = getContentResolver().query(Uri.parse("content://sms/"), null, numberString, null, null);
 
         if (cur.moveToFirst()) { /* false = no sms */

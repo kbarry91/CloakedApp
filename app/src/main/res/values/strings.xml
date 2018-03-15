@@ -34,6 +34,7 @@
     <!-- Strings for Message list -->
     <string name="send_button_text">SEND</string>
     <string name="send_message_hint">Enter Message...</string>
+    <string name="view_sms">VIEW SMS</string>
 
     <!-- Contacts -->
     <string name="contact_img">contactImg</string>

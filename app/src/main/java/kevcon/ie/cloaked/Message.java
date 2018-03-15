@@ -1,15 +1,16 @@
 package kevcon.ie.cloaked;
 
 /**
- * Created by Intel Build on 09/03/2018.
- */
-/*
-Represents a Message
+ * <h1>Message</h1>
+ * The Message class represents a sms message
+ *
+ * @author kevin barry
+ * @since 15/3/18
  */
 public class Message {
     private String message;
     private String sender;
-    private String body;
+    private String time;
     private int type;
 
     //null constructor
@@ -17,11 +18,11 @@ public class Message {
 
     }
 
-    public Message(String message, String sender, String body, int type) {
+    public Message(String message, String sender, String time, int type) {
 
         this.message = message;
         this.sender = sender;
-        this.body = body;
+        this.time = time;
         this.type = type;
     }
 
@@ -41,12 +42,12 @@ public class Message {
         this.sender = sender;
     }
 
-    public String getBody() {
-        return body;
+    public String getTime() {
+        return time;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public int getType() {
@@ -57,6 +58,9 @@ public class Message {
         this.type = type;
     }
 
-
+    @Override
+    public String toString() {
+        return "M:" + message + " S: " + sender + " T: " + type + " D: " + time;
+    }
 }
 
