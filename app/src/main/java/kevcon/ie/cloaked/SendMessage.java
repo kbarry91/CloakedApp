@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -32,6 +33,8 @@ public class SendMessage extends AppCompatActivity {
     // define UI Components
     private EditText user_message;
     private Button send_button;
+    private RecyclerView messageRec;
+    private MessageViewAdapter messageAdp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +42,10 @@ public class SendMessage extends AppCompatActivity {
 
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
-        List<Message> messageList2 = createMessageList("+353858443049");
+        List<Message> listMessageData = createMessageList("+353858443049");
 
         //test list is populating
-        for (Message msg : messageList2) {
+        for (Message msg : listMessageData) {
             Log.d(READMSG, "DEBUG: " + msg.toString());
         }
 
@@ -53,6 +56,9 @@ public class SendMessage extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        //assign Recycle view to view
+        messageRec = findViewById(R.id.recycler_view_inbox_list);
+        messageAdp = new MessageViewAdapter(this, listMessageData);
         //getSupportActionBar().setHomeButtonEnabled(true);
         //assign user_message and button to view
         user_message = findViewById(R.id.edit_message);
