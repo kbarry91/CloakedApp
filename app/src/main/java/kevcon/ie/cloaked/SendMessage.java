@@ -10,8 +10,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <h1>SendMessage</h1>
+ * SendMessage controls the sending and loading of sms messages
+ *
  * @author kevin barry
  */
 public class SendMessage extends AppCompatActivity {
@@ -33,13 +36,14 @@ public class SendMessage extends AppCompatActivity {
     // define UI Components
     private EditText user_message;
     private Button send_button;
+
     private RecyclerView messageRec;
     private MessageViewAdapter messageAdp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_send_message);
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
         List<Message> listMessageData = createMessageList("+353858443049");
@@ -53,14 +57,18 @@ public class SendMessage extends AppCompatActivity {
         setContentView(R.layout.activity_send_message);
 
         // set up a toolbar and back button to parent activity
-        Toolbar myToolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+        //Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        //   setSupportActionBar(myToolbar);
 
         //assign Recycle view to view
         messageRec = findViewById(R.id.recycler_view_inbox_list);
         messageAdp = new MessageViewAdapter(this, listMessageData);
+        messageRec.setLayoutManager(new LinearLayoutManager(this));
+        messageRec.setAdapter(messageAdp);
+
         //getSupportActionBar().setHomeButtonEnabled(true);
         //assign user_message and button to view
+
         user_message = findViewById(R.id.edit_message);
         send_button = findViewById(R.id.button_sms_send);
 
@@ -119,6 +127,9 @@ public class SendMessage extends AppCompatActivity {
             Log.d(READMSG, " No sms from this contact");
             Toast.makeText(this, " No messages to view", Toast.LENGTH_SHORT).show();
         }
+
+        // cursor must be closed and recycled
+        cur.close();
         return messageList;
     }
 
@@ -189,6 +200,10 @@ public class SendMessage extends AppCompatActivity {
 
         // display notification of message sent
         Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
+
+        //reset text field
+        user_message.setText(null);
+        user_message.setHint(R.string.send_message_hint);
     }
 
 }

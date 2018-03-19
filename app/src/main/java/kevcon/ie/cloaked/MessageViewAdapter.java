@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -23,6 +25,11 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
     public MessageViewAdapter(Context ctx, List<Message> listMessageData) {
         this.ctx = ctx;
         this.listMessageData = listMessageData;
+    }
+
+    @Override
+    public int getItemCount() {
+        return listMessageData.size();
     }
 
 
@@ -61,25 +68,62 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
         return null;
     }
 
+    // bind message object to viewholder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Message message = listMessageData.get(position);
 
+        switch (holder.getItemViewType()) {
+            case 2:
+                ((messageOutHolder) holder).bind(message);
+                break;
+            case 1:
+                ((messageInHolder) holder).bind(message);
+        }
     }
 
-    @Override
-    public int getItemCount() {
-        return listMessageData.size();
-    }
 
     private class messageOutHolder extends RecyclerView.ViewHolder {
+        TextView messageText, timeText;
+
         messageOutHolder(View view) {
+
             super(view);
+            messageText = itemView.findViewById(R.id.text_message_body);
+            timeText = itemView.findViewById(R.id.text_message_time);
+        }
+
+        void bind(Message message) {
+            messageText.setText(message.getMessage());
+            timeText.setText(message.getTime());
+            // Format the stored timestamp into a readable String using method.
+            //timeText.setText(Utils.formatDateTime(message.getCreatedAt()));/////////////////////////need to make a utill class for generic methods
         }
     }
 
     private class messageInHolder extends RecyclerView.ViewHolder {
+        TextView messageText, timeText, nameText;
+        ImageView profileImage;
+
         messageInHolder(View view) {
+
             super(view);
+
+            messageText = itemView.findViewById(R.id.text_message_body);
+            timeText = itemView.findViewById(R.id.text_message_time);
+            nameText = itemView.findViewById(R.id.text_message_name);
+        }
+
+        void bind(Message message) {
+            messageText.setText(message.getMessage());
+
+            // Format the stored timestamp into a readable String using method.
+            // timeText.setText(Utils.formatDateTime(message.getCreatedAt()));
+            timeText.setText(message.getTime());
+            nameText.setText(message.getSender());
+
+            // Insert the profile image from the URL into the ImageView.
+            // Utils.displayRoundImageFromUrl(mContext, message.getSender(), profileImage);
         }
     }
 }
