@@ -2,16 +2,11 @@ package kevcon.ie.cloaked;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         /*
@@ -33,13 +28,13 @@ public class MainActivity extends AppCompatActivity {
         });
         */
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Contacts"));
         tabLayout.addTab(tabLayout.newTab().setText("Messages"));
         tabLayout.addTab(tabLayout.newTab().setText("About"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final ViewPager viewPager = findViewById(R.id.pager);
         final PagerAdapter adapter = new PagerAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
@@ -75,6 +70,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SendMessage.class);
         startActivity(intent);
     }
+/*
+    public void viewSms(View view) {
+        // Do something in response to button
+        Intent intent = new Intent(this, ReadSmsTestActivity.class);
+        startActivity(intent);
+    }
+    */
 /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
