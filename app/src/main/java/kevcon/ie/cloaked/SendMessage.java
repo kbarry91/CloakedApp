@@ -64,7 +64,7 @@ public class SendMessage extends AppCompatActivity {
     //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
     public void sendSms() {
         Log.d(TAG, "Attempting to send sms");
-        String strPhone = "0858443049";
+        String strPhone = "0857841272";
         String strMessage = "sent from cloaked app: " + user_message.getText().toString();
 
         // populate message object
