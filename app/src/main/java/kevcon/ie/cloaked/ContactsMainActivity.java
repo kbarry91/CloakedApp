@@ -2,6 +2,7 @@ package kevcon.ie.cloaked;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +31,7 @@ public class ContactsMainActivity extends Activity {
     ContactsAdapter contactAdapter;
     Contacts contacts;
 
-    final int C_View=1,C_Delete=2;
+    final int C_View=1,C_Delete=2,C_SendMessage=3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class ContactsMainActivity extends Activity {
         if (v.getId() == R.id.listView) {
             menu.add(0, C_View, 1, "View");
             menu.add(0, C_Delete, 2, "Delete");
+            menu.add(0, C_SendMessage, 3, "Send Message");
 
         }
 
@@ -111,6 +114,20 @@ public class ContactsMainActivity extends Activity {
 
                 break;
 
+            case C_SendMessage:
+                                        //Change ContactDetails to a SendSms.java
+                                        //or something, this will pass the contents into the selected
+                                        //index into a class. Ask Kevin which class suits.
+                Intent intent7=new Intent(ContactsMainActivity.this,SendMessage.class);
+                AdapterView.AdapterContextMenuInfo info2 = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                int index2 = info2.position;
+
+                intent7.putExtra("send_msg", arrayListContact.get(index2));
+
+                startActivity(intent7);
+
+                break;
+
         }
         return  true;
 
@@ -121,6 +138,8 @@ public class ContactsMainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        FileOutputStream outputStream;
+        String filename = "myfile";
 
         if (resultCode==2) {
 
@@ -128,6 +147,16 @@ public class ContactsMainActivity extends Activity {
 
             arrayListContact.add(contacts);
             contactAdapter.notifyDataSetChanged();
+
+            /*
+            try {
+                outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+                outputStream.write(arrayListContact);
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            */
         }
 
 

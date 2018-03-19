@@ -40,13 +40,41 @@ public class SendMessage extends AppCompatActivity {
     private RecyclerView messageRec;
     private MessageViewAdapter messageAdp;
 
+
+    //=====================================
+    Contacts ContactDetails;
+    private String mContactName,mContactNumber,mContactEmail;
+    private int mContactImage;
+
+    //=====================================
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_message);
+
+
+        //================================================================
+        Intent intent=new Intent();
+        intent=getIntent();
+        ContactDetails = (Contacts) intent.getSerializableExtra("send_msg");
+
+        //These 'm' objects contain the details the selected contact from contacts
+
+       // mContactImage=ContactDetails.getImageId();
+        mContactNumber=ContactDetails.getNumber();
+        //mContactName=ContactDetails.getName();
+       // mContactEmail=ContactDetails.getEmail();
+
+        final String prefix = "+353";
+
+        //==================================================
+
+
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
-        List<Message> listMessageData = createMessageList("+353858443049");
+        List<Message> listMessageData = createMessageList(mContactNumber);
 
         //test list is populating
         for (Message msg : listMessageData) {
@@ -76,7 +104,7 @@ public class SendMessage extends AppCompatActivity {
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendSms("+353858443049");
+                sendSms(mContactNumber);
             }
         });
     }
