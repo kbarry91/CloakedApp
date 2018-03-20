@@ -1,7 +1,6 @@
 package kevcon.ie.cloaked;
 
-import android.icu.text.SimpleDateFormat;
-
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -12,18 +11,17 @@ import java.util.Date;
  * @since 19/3/2018
  */
 public class Utils {
-    public static String convertDate(String date) {
 
-        String longV = date;
+    /**
+     * convertDate converts the date from time in milliseconds to MM/dd/yy hh:mm format
+     *
+     * @return a formatted string date
+     */
+    static String convertDate(String date) {
+
         String dateString;
-        long millisecond = Long.parseLong(longV);
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            dateString = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSS").format(new Date(millisecond));
-        } else {
-            dateString = "received";
-        }
-
+        long millisecond = Long.parseLong(date);
+        dateString = new SimpleDateFormat("MM/dd/yy hh:mm").format(new Date(millisecond));
         return dateString;
     }
 }

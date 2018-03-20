@@ -95,7 +95,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
 
         void bind(Message message) {
             messageText.setText(message.getMessage());
-            timeText.setText(message.getTime());
+            timeText.setText(Utils.convertDate(message.getTime()));
             // Format the stored timestamp into a readable String using method.
             //timeText.setText(Utils.formatDateTime(message.getCreatedAt()));/////////////////////////need to make a utill class for generic methods
         }
