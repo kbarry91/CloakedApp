@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -40,13 +41,8 @@ public class SendMessage extends AppCompatActivity {
     private RecyclerView messageRec;
     private MessageViewAdapter messageAdp;
 
-
-    //=====================================
-    Contacts ContactDetails;
-    private String mContactName,mContactNumber,mContactEmail;
-    private int mContactImage;
-
-    //=====================================
+    // initilize contact
+    Contacts contact;
 
 
     @Override
@@ -54,27 +50,14 @@ public class SendMessage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_message);
 
-
-        //================================================================
-        Intent intent=new Intent();
-        intent=getIntent();
-        ContactDetails = (Contacts) intent.getSerializableExtra("send_msg");
-
-        //These 'm' objects contain the details the selected contact from contacts
-
-       // mContactImage=ContactDetails.getImageId();
-        mContactNumber=ContactDetails.getNumber();
-        //mContactName=ContactDetails.getName();
-       // mContactEmail=ContactDetails.getEmail();
-
-        final String prefix = "+353";
-
-        //==================================================
-
+        // receive information through intent regarding the contact
+        Intent intent;
+        intent = getIntent();
+        contact = (Contacts) intent.getSerializableExtra("send_msg");
 
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
-        List<Message> listMessageData = createMessageList(mContactNumber);
+        List<Message> listMessageData = createMessageList(contact.getNumber());
 
         //test list is populating
         for (Message msg : listMessageData) {
@@ -84,9 +67,10 @@ public class SendMessage extends AppCompatActivity {
         Log.d(TAG, "onCreate: opened");
         setContentView(R.layout.activity_send_message);
 
-        // set up a toolbar and back button to parent activity
-        //Toolbar myToolbar = findViewById(R.id.my_toolbar);
-        //   setSupportActionBar(myToolbar);
+        // set up a toolbar with contacts name and back button to parent activity
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setTitle(contact.getName());
 
         //assign Recycle view to view
         messageRec = findViewById(R.id.recycler_view_inbox_list);
@@ -104,7 +88,7 @@ public class SendMessage extends AppCompatActivity {
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendSms(mContactNumber);
+                sendSms(contact.getNumber());
             }
         });
     }
