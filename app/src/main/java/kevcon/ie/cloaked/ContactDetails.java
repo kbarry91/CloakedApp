@@ -20,10 +20,9 @@ import java.util.ArrayList;
 public class ContactDetails extends Activity {
 
     Contacts ContactDetails;
-    private String mContactName,mContactNumber,mContactEmail;
-    private int mContactImage;
-    TextView details_name,details_number,details_email;
-    ImageView details_image;
+    private String mContactName,mContactNumber, mKey;
+    boolean mIsKeySet;
+    TextView details_name,details_number;
     Button backButton;
 
     @Override
@@ -31,31 +30,24 @@ public class ContactDetails extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_details);
 
-        details_image= (ImageView) findViewById(R.id.details_image);
+        backButton= findViewById(R.id.backButton);
 
-        backButton= (Button) findViewById(R.id.backButton);
+        details_name= findViewById(R.id.details_name);
+        details_number= findViewById(R.id.details_number);
 
-        details_name= (TextView) findViewById(R.id.details_name);
-        details_email= (TextView) findViewById(R.id.details_email);
-        details_number= (TextView) findViewById(R.id.details_number);
-
-        Intent intent9=new Intent();
+        Intent intent9;
         intent9=getIntent();
         ContactDetails = (Contacts) intent9.getSerializableExtra("details");
 
-        mContactImage=ContactDetails.getImageId();
         mContactNumber=ContactDetails.getNumber();
         mContactName=ContactDetails.getName();
-        mContactEmail=ContactDetails.getEmail();
+        mKey = ContactDetails.getKey();
+        mIsKeySet = ContactDetails.getKeySet();
+
 
 
         details_name.setText(mContactName);
-
-
-
         details_number.setText(mContactNumber);
-        details_email.setText(mContactEmail);
-        details_image.setImageResource(mContactImage);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

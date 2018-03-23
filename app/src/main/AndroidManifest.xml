@@ -68,11 +68,6 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Images"
-            android:label="Images"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
             android:name=".Data"
             android:label="Data"
             android:theme="@style/AppTheme.NoActionBar">

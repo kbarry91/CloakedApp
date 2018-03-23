@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 public class ContactsAdapter extends BaseAdapter {
 
-    Context context;
-    ArrayList<Contacts> contact;
+    private Context context;
+    private ArrayList<Contacts> contact;
 
     public ContactsAdapter(Context context, ArrayList<Contacts> contact) {
         this.context = context;
@@ -56,14 +56,12 @@ public class ContactsAdapter extends BaseAdapter {
             view=convertView;
         }
 
-        ImageView imgContact= (ImageView) view.findViewById(R.id.contactImage);
-        TextView contactName= (TextView) view.findViewById(R.id.contactName);
+        TextView contactName= view.findViewById(R.id.contactName);
 
         //get data
 
 
         Contacts contacts=contact.get(position);
-        imgContact.setImageResource(contacts.getImageId());
         contactName.setText(contacts.getName());
         System.getProperty("line.separator");
         Log.e("name", contacts.getName() + " ");

@@ -8,17 +8,21 @@ import java.io.Serializable;
 
 public class Contacts implements Serializable{
 
-    private String mName,mEmail,mNumber;
-    private int mImageId;
+    private String mName;
+    private String mNumber;
+    private String key;
+    private boolean isKeySet;
 
-    public Contacts(String name, String email, String number, int imageId) {
+
+    public Contacts(String name, String number, String key, boolean isKeySet) {
         this.mName = name;
-        this.mEmail = email;
         this.mNumber = number;
-        this.mImageId = imageId;
+        this.isKeySet = isKeySet;
+        this.key = key;
     }
 
     public String getName() {
+
         return mName;
     }
 
@@ -26,27 +30,32 @@ public class Contacts implements Serializable{
         this.mName = name;
     }
 
-    public String getEmail() {
-        return mEmail;
-    }
-
-    public void setEmail(String email) {
-        this.mEmail = email;
-    }
-
     public String getNumber() {
+
         return mNumber;
     }
 
     public void setNumber(String number) {
+
         this.mNumber = number;
     }
 
-    public int getImageId() {
-        return mImageId;
+    public void setKeySet(boolean isKeySet){
+        this.isKeySet = isKeySet;
     }
 
-    public void setImageId(int imageId) {
-        this.mImageId = imageId;
+    public boolean getKeySet(){
+        return isKeySet;
     }
+
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+
 }

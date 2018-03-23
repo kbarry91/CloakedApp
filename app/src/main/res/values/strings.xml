@@ -38,7 +38,7 @@
 
     <!-- Contacts -->
     <string name="contact_img">contactImg</string>
-    <string name="details_name">Name</string>
+    <string name="details_name">Username</string>
     <string name="details_number">Number</string>
     <string name="details_email">Email</string>
     <string name="back_contacts">Back To Contacts Page</string>
