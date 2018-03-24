@@ -43,7 +43,7 @@ public class SendMessage extends AppCompatActivity {
 
     // initilize contact
     Contacts contact;
-
+    Contacts testContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class SendMessage extends AppCompatActivity {
         intent = getIntent();
         contact = (Contacts) intent.getSerializableExtra("send_msg");
 
+        testContact = new Contacts("testCon", "085555555", "testkey", true);
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
         List<Message> listMessageData = createMessageList(contact.getNumber());
@@ -91,6 +92,8 @@ public class SendMessage extends AppCompatActivity {
                 sendSms(contact.getNumber());
             }
         });
+
+
     }
 
     // a method to populate a list of messages
@@ -147,75 +150,84 @@ public class SendMessage extends AppCompatActivity {
 
     //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
     public void sendSms(String userNumber) {
-        Log.d(TAG, "Attempting to send sms");
-        String strMessage = "sent from cloaked app: " + user_message.getText().toString();
 
-        SmsManager sms = SmsManager.getDefault();
+        //to send a message first an encryption key must be established
+        if (testContact.getKeySet()) {
+            Log.d(TAG, "Attempting to send sms");
+            String strMessage = "sent from cloaked app: " + user_message.getText().toString();
 
-        Context curContext = this.getApplicationContext();
+            // a test message to try encryption
+            String testMessage = user_message.getText().toString();
 
-        // must create intents to Check if sms is sent and delivered
-        PendingIntent sentPending = PendingIntent.getBroadcast(curContext,
-                0, new Intent("SENT"), 0);
+            SmsManager sms = SmsManager.getDefault();
 
-        // receiver intent to return result of  Broadcast
-        curContext.registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context arg0, Intent arg1) {
-                switch (getResultCode()) {
-                    case Activity.RESULT_OK:
-                        Toast.makeText(getBaseContext(), "SMS Sent.",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Toast.makeText(getBaseContext(), "SMS Not Sent: Generic failure.",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_NO_SERVICE:
-                        Toast.makeText(getBaseContext(), "SMS Not Sent: No service ",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Toast.makeText(getBaseContext(), "Not Sent: Null PDU.",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_RADIO_OFF:
-                        Toast.makeText(getBaseContext(), "Not Sent: Ensure Airplane mode is disabled",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                }
-            }
-        }, new IntentFilter("SENT"));
+            Context curContext = this.getApplicationContext();
 
-        PendingIntent deliveredPending = PendingIntent.getBroadcast(curContext,
-                0, new Intent("DELIVERED"), 0);
+            // must create intents to Check if sms is sent and delivered
+            PendingIntent sentPending = PendingIntent.getBroadcast(curContext,
+                    0, new Intent("SENT"), 0);
 
-        curContext.registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context arg0, Intent arg1) {
-                        switch (getResultCode()) {
-                            case Activity.RESULT_OK:
-                                Toast.makeText(getBaseContext(), "Delivered.",
-                                        Toast.LENGTH_LONG).show();
-                                break;
-                            case Activity.RESULT_CANCELED:
-                                Toast.makeText(getBaseContext(), "Not Delivered: Canceled.",
-                                        Toast.LENGTH_LONG).show();
-                                break;
-                        }
+            // receiver intent to return result of  Broadcast
+            curContext.registerReceiver(new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode()) {
+                        case Activity.RESULT_OK:
+                            Toast.makeText(getBaseContext(), "SMS Sent.",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                            Toast.makeText(getBaseContext(), "SMS Not Sent: Generic failure.",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case SmsManager.RESULT_ERROR_NO_SERVICE:
+                            Toast.makeText(getBaseContext(), "SMS Not Sent: No service ",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case SmsManager.RESULT_ERROR_NULL_PDU:
+                            Toast.makeText(getBaseContext(), "Not Sent: Null PDU.",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case SmsManager.RESULT_ERROR_RADIO_OFF:
+                            Toast.makeText(getBaseContext(), "Not Sent: Ensure Airplane mode is disabled",
+                                    Toast.LENGTH_LONG).show();
+                            break;
                     }
-                }, new IntentFilter("DELIVERED"));
+                }
+            }, new IntentFilter("SENT"));
 
-        //send the message and set receivers
-        sms.sendTextMessage(userNumber, null, strMessage, sentPending, deliveredPending);
+            PendingIntent deliveredPending = PendingIntent.getBroadcast(curContext,
+                    0, new Intent("DELIVERED"), 0);
 
-        // display notification of message sent
-        Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
+            curContext.registerReceiver(
+                    new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context arg0, Intent arg1) {
+                            switch (getResultCode()) {
+                                case Activity.RESULT_OK:
+                                    Toast.makeText(getBaseContext(), "Delivered.",
+                                            Toast.LENGTH_LONG).show();
+                                    break;
+                                case Activity.RESULT_CANCELED:
+                                    Toast.makeText(getBaseContext(), "Not Delivered: Canceled.",
+                                            Toast.LENGTH_LONG).show();
+                                    break;
+                            }
+                        }
+                    }, new IntentFilter("DELIVERED"));
 
-        //reset text field
-        user_message.setText(null);
-        user_message.setHint(R.string.send_message_hint);
+            //send the message and set receivers
+            sms.sendTextMessage(userNumber, null, strMessage, sentPending, deliveredPending);
+
+            // display notification of message sent
+            Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
+
+            //reset text field
+            user_message.setText(null);
+            user_message.setHint(R.string.send_message_hint);
+        } else {
+            //must set a key
+        }
     }
 
 }
