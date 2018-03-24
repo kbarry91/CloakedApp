@@ -39,32 +39,29 @@ public class Encryption {
 
 
     public static char encrypt(char letter, String cipherKey) {
-        char newletter = letter;
-        String key = cipherKey;
 
         int row = 0;
-        int col = 0;
+        int col;
 
-        if ((int) newletter > 64 && (int) newletter < 91) {
-
+        // can remove this loop
+        if ((int) letter > 64 && (int) letter < 91) {
             for (int i = 1; i < 14; i++) {
-                if (tableau[i][0].indexOf(key.charAt(keyLetter)) >= 0) {
+                if (tableau[i][0].indexOf(cipherKey.charAt(keyLetter)) >= 0) {
                     row = i;
                     break;
                 } // if
             } // for row
 
-            col = (((int) newletter) - 65) + 1;
+            col = (((int) letter) - 65) + 1;
 
             //increment keyLetters location in encryption key
             keyLetter++;
-            if (keyLetter == key.length()) {
+            if (keyLetter == cipherKey.length()) {
                 keyLetter = 0;
             }
-            newletter = tableau[row][col].charAt(0);
+            letter = tableau[row][col].charAt(0);
         }
-        ;// if(newletter > 64 && newletter<91)
-        return newletter;
+        return letter;
     }// encrypt
 
 }

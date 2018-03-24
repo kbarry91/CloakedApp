@@ -55,7 +55,7 @@ public class SendMessage extends AppCompatActivity {
         intent = getIntent();
         contact = (Contacts) intent.getSerializableExtra("send_msg");
 
-        testContact = new Contacts("testCon", "085555555", "testkey", true);
+        testContact = new Contacts("testCon", "+353858443049", "testkey", true);
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
         List<Message> listMessageData = createMessageList(contact.getNumber());
@@ -89,7 +89,7 @@ public class SendMessage extends AppCompatActivity {
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendSms(contact.getNumber());
+                sendSms(testContact);
             }
         });
 
@@ -149,15 +149,23 @@ public class SendMessage extends AppCompatActivity {
     }
 
     //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
-    public void sendSms(String userNumber) {
+    public void sendSms(Contacts testContact) {
+// a test message to try encryption
+        String testMessage = user_message.getText().toString();
+        String cloakedMessage = "";
 
         //to send a message first an encryption key must be established
         if (testContact.getKeySet()) {
+            int pos = 0;
+            int sentLength = testMessage.length();
+            while (pos < sentLength) {// while end of sentence not reached
+                char letter = Encryption.encrypt(Character.toUpperCase(testMessage.charAt(pos)), testContact.getKey().toUpperCase());
+                cloakedMessage += letter;
+                pos++;
+            } // while
+
             Log.d(TAG, "Attempting to send sms");
             String strMessage = "sent from cloaked app: " + user_message.getText().toString();
-
-            // a test message to try encryption
-            String testMessage = user_message.getText().toString();
 
             SmsManager sms = SmsManager.getDefault();
 
@@ -217,8 +225,8 @@ public class SendMessage extends AppCompatActivity {
                     }, new IntentFilter("DELIVERED"));
 
             //send the message and set receivers
-            sms.sendTextMessage(userNumber, null, strMessage, sentPending, deliveredPending);
-
+            // sms.sendTextMessage(userNumber, null, strMessage, sentPending, deliveredPending);
+            sms.sendTextMessage(testContact.getNumber(), null, cloakedMessage, sentPending, deliveredPending);
             // display notification of message sent
             Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
 
