@@ -44,4 +44,7 @@
     <string name="back_contacts">Back To Contacts Page</string>
     <string name="add_contacts">Add Contact</string>
     <string name="enter_send_sms">Send SMS</string>
+
+    <!-- Key Entry Dialog -->
+    <string name="enter_key">Enter Cloaked key</string>
 </resources>
