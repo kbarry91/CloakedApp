@@ -5,6 +5,7 @@
     <item name="masked" type="id" />
 
     <!-- Strings related to login -->
+    <string name="img_desc">Cloaked logo</string>
     <string name="prompt_email">Email</string>
     <string name="register_email">Enter an Email Address</string>
     <string name="register_password">Enter a Password</string>
