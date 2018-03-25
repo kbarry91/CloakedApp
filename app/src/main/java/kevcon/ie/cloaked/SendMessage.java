@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -15,13 +16,17 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.AlertDialog.Builder;
 
 /**
  * <h1>SendMessage</h1>
@@ -41,9 +46,13 @@ public class SendMessage extends AppCompatActivity {
     private RecyclerView messageRec;
     private MessageViewAdapter messageAdp;
 
-    // initilize contact
+    // initialize contact
     Contacts contact;
     Contacts testContact;
+
+
+    private String verifyEnteredKey;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +64,10 @@ public class SendMessage extends AppCompatActivity {
         intent = getIntent();
         contact = (Contacts) intent.getSerializableExtra("send_msg");
 
-        testContact = new Contacts("testCon", "+353858443049", "testkey", true);
+        testContact = new Contacts("testCon", "+353857841272", "testkey", true);
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
-        List<Message> listMessageData = createMessageList(contact.getNumber());
+        List<Message> listMessageData = createMessageList(testContact.getNumber());
 
         //test list is populating
         for (Message msg : listMessageData) {
@@ -89,8 +98,22 @@ public class SendMessage extends AppCompatActivity {
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendSms(testContact);
-            }
+                //to send a message first an encryption key must be established
+                if (testContact.getKeySet()) {
+                    // need to initialize key set mechanisim
+                    verifyKey();
+                    Log.d("inGETKEY SET", "!!!!!!!!!!!!!!!!!");
+                    Log.d("ENTERED KEYY-------", verifyEnteredKey);
+                    /*
+                    if (verifyEnteredKey.equals(testContact.getKey())){
+                        sendSms(testContact);
+                    }else {
+                        Toast.makeText(getBaseContext(), "Invalid Cloaked Key",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    */
+                }
+            }//on click
         });
 
 
@@ -148,94 +171,128 @@ public class SendMessage extends AppCompatActivity {
         return messageList;
     }
 
+
+    public void verifyKey() {
+        verifyEnteredKey = "";
+        Builder builder = new Builder(SendMessage.this);
+        builder.setTitle("Cloaked Key");
+        // I'm using fragment here so I'm using getView() to provide ViewGroup
+        // but you can provide here any other instance of ViewGroup from your Fragment / Activity
+        View viewInflated = LayoutInflater.from(SendMessage.this).inflate(R.layout.key_entry_dialog, (ViewGroup) findViewById(android.R.id.content), false);
+        // Set up the input
+        final EditText input = viewInflated.findViewById(R.id.input);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        builder.setView(viewInflated);
+
+        // Set up the buttons
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                verifyEnteredKey = input.getText().toString();
+                Log.d("ENTERED KEYY in dialog", verifyEnteredKey);
+                dialog.dismiss();
+
+
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+        // if(verifyEnteredKey.equals(contact.getKey())){
+        //   return true;
+        // }
+        //  return false;
+    }
     //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
     public void sendSms(Contacts testContact) {
 // a test message to try encryption
         String testMessage = user_message.getText().toString();
-        String cloakedMessage = "";
+        StringBuilder cloakedMessage = new StringBuilder();
 
         //to send a message first an encryption key must be established
-        if (testContact.getKeySet()) {
-            int pos = 0;
-            int sentLength = testMessage.length();
-            while (pos < sentLength) {// while end of sentence not reached
-                char letter = Encryption.encrypt(Character.toUpperCase(testMessage.charAt(pos)), testContact.getKey().toUpperCase());
-                cloakedMessage += letter;
-                pos++;
-            } // while
 
-            Log.d(TAG, "Attempting to send sms");
-            String strMessage = "sent from cloaked app: " + user_message.getText().toString();
+        int pos = 0;
+        int sentLength = testMessage.length();
+        while (pos < sentLength) {// while end of sentence not reached
+            char letter = Encryption.encrypt(Character.toUpperCase(testMessage.charAt(pos)), testContact.getKey().toUpperCase());
+            cloakedMessage.append(letter);
+            pos++;
+        } // while
 
-            SmsManager sms = SmsManager.getDefault();
+        Log.d(TAG, "Attempting to send sms");
+        String strMessage = "sent from cloaked app: " + user_message.getText().toString();
 
-            Context curContext = this.getApplicationContext();
+        SmsManager sms = SmsManager.getDefault();
 
-            // must create intents to Check if sms is sent and delivered
-            PendingIntent sentPending = PendingIntent.getBroadcast(curContext,
-                    0, new Intent("SENT"), 0);
+        Context curContext = this.getApplicationContext();
 
-            // receiver intent to return result of  Broadcast
-            curContext.registerReceiver(new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context arg0, Intent arg1) {
-                    switch (getResultCode()) {
-                        case Activity.RESULT_OK:
-                            Toast.makeText(getBaseContext(), "SMS Sent.",
-                                    Toast.LENGTH_LONG).show();
-                            break;
-                        case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                            Toast.makeText(getBaseContext(), "SMS Not Sent: Generic failure.",
-                                    Toast.LENGTH_LONG).show();
-                            break;
-                        case SmsManager.RESULT_ERROR_NO_SERVICE:
-                            Toast.makeText(getBaseContext(), "SMS Not Sent: No service ",
-                                    Toast.LENGTH_LONG).show();
-                            break;
-                        case SmsManager.RESULT_ERROR_NULL_PDU:
-                            Toast.makeText(getBaseContext(), "Not Sent: Null PDU.",
-                                    Toast.LENGTH_LONG).show();
-                            break;
-                        case SmsManager.RESULT_ERROR_RADIO_OFF:
-                            Toast.makeText(getBaseContext(), "Not Sent: Ensure Airplane mode is disabled",
-                                    Toast.LENGTH_LONG).show();
-                            break;
-                    }
+        // must create intents to Check if sms is sent and delivered
+        PendingIntent sentPending = PendingIntent.getBroadcast(curContext,
+                0, new Intent("SENT"), 0);
+
+        // receiver intent to return result of  Broadcast
+        curContext.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode()) {
+                    case Activity.RESULT_OK:
+                        Toast.makeText(getBaseContext(), "SMS Sent.",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        Toast.makeText(getBaseContext(), "SMS Not Sent: Generic failure.",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Toast.makeText(getBaseContext(), "SMS Not Sent: No service ",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        Toast.makeText(getBaseContext(), "Not Sent: Null PDU.",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        Toast.makeText(getBaseContext(), "Not Sent: Ensure Airplane mode is disabled",
+                                Toast.LENGTH_LONG).show();
+                        break;
                 }
-            }, new IntentFilter("SENT"));
+            }
+        }, new IntentFilter("SENT"));
 
-            PendingIntent deliveredPending = PendingIntent.getBroadcast(curContext,
-                    0, new Intent("DELIVERED"), 0);
+        PendingIntent deliveredPending = PendingIntent.getBroadcast(curContext,
+                0, new Intent("DELIVERED"), 0);
 
-            curContext.registerReceiver(
-                    new BroadcastReceiver() {
-                        @Override
-                        public void onReceive(Context arg0, Intent arg1) {
-                            switch (getResultCode()) {
-                                case Activity.RESULT_OK:
-                                    Toast.makeText(getBaseContext(), "Delivered.",
-                                            Toast.LENGTH_LONG).show();
-                                    break;
-                                case Activity.RESULT_CANCELED:
-                                    Toast.makeText(getBaseContext(), "Not Delivered: Canceled.",
-                                            Toast.LENGTH_LONG).show();
-                                    break;
-                            }
+        curContext.registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context arg0, Intent arg1) {
+                        switch (getResultCode()) {
+                            case Activity.RESULT_OK:
+                                Toast.makeText(getBaseContext(), "Delivered.",
+                                        Toast.LENGTH_LONG).show();
+                                break;
+                            case Activity.RESULT_CANCELED:
+                                Toast.makeText(getBaseContext(), "Not Delivered: Canceled.",
+                                        Toast.LENGTH_LONG).show();
+                                break;
                         }
-                    }, new IntentFilter("DELIVERED"));
+                    }
+                }, new IntentFilter("DELIVERED"));
 
-            //send the message and set receivers
-            // sms.sendTextMessage(userNumber, null, strMessage, sentPending, deliveredPending);
-            sms.sendTextMessage(testContact.getNumber(), null, cloakedMessage, sentPending, deliveredPending);
-            // display notification of message sent
-            Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
+        //send the message and set receivers
+        // sms.sendTextMessage(userNumber, null, strMessage, sentPending, deliveredPending);
+        sms.sendTextMessage(testContact.getNumber(), null, cloakedMessage.toString(), sentPending, deliveredPending);
+        // display notification of message sent
+        Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
 
-            //reset text field
-            user_message.setText(null);
-            user_message.setHint(R.string.send_message_hint);
-        } else {
-            //must set a key
-        }
+        //reset text field
+        user_message.setText(null);
+        user_message.setHint(R.string.send_message_hint);
     }
 
 }

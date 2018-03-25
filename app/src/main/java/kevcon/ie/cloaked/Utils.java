@@ -24,4 +24,5 @@ public class Utils {
         dateString = new SimpleDateFormat("MM/dd/yy hh:mm").format(new Date(millisecond));
         return dateString;
     }
+
 }

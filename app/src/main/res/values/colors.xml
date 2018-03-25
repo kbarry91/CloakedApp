@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#747474</color>
+    <color name="colorPrimaryDark">#424142</color>
+    <color name="colorAccent">#FF6F16</color>
 
     <!--a plain colour for message list background-->
     <color name="colorPlain">#dfdfdf</color>
     <color name="colorDarkBlue">#252e44</color>
+    <color name="colorDarkGrey">#424142</color>
+    <color name="colorLightGrey">#a1a1a0</color>
+    <color name="colorMediumGrey">#747474</color>
+    <color name="colorVeryLightGrey">#e6e6e6</color>
 </resources>
