@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +64,10 @@ public class SendMessage extends AppCompatActivity {
         Intent intent;
         intent = getIntent();
         contact = (Contacts) intent.getSerializableExtra("send_msg");
+
+        //test getting country code
+        String cc = GetCountryZipCode();
+        Log.d(READMSG, "DEBUG Country code is : " + cc);
 
         this.testContact = new Contacts("testCon", "+353xxxxxx", "testkey", true);
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -120,6 +125,26 @@ public class SendMessage extends AppCompatActivity {
 
     }
 
+    /*
+    * Method to get country code for a number will be moved to add contact*/
+    public String GetCountryZipCode() {
+
+        String CountryID = "";
+        String CountryZipCode = "";
+
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        //getNetworkCountryIso
+        CountryID = manager.getSimCountryIso().toUpperCase();
+        String[] rl = this.getResources().getStringArray(R.array.CountryCodes);
+        for (int i = 0; i < rl.length; i++) {
+            String[] g = rl[i].split(",");
+            if (g[1].trim().equals(CountryID.trim())) {
+                CountryZipCode = g[0];
+                break;
+            }
+        }
+        return CountryZipCode;
+    }
     // a method to populate a list of messages
     public List<Message> createMessageList(String userNumber) {
         List<Message> messageList = new ArrayList<>();
