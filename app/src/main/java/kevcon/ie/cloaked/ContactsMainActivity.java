@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -138,27 +139,32 @@ public class ContactsMainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        FileOutputStream outputStream;
-        String filename = "myfile";
 
         if (resultCode==2) {
 
             contacts = (Contacts) data.getSerializableExtra("data");
 
+
             arrayListContact.add(contacts);
             contactAdapter.notifyDataSetChanged();
 
-            /*
-            try {
-                outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                outputStream.write(arrayListContact);
-                outputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            */
+
+
         }
 
 
     }
+
 }
+
+/*
+
+//Retrieve the values
+Set<String> set = myScores.getStringSet("key", null);
+
+//Set the values
+Set<String> set = new HashSet<String>();
+set.addAll(listOfExistingScores);
+scoreEditor.putStringSet("key", set);
+scoreEditor.commit();
+ */
