@@ -64,7 +64,7 @@ public class SendMessage extends AppCompatActivity {
         intent = getIntent();
         contact = (Contacts) intent.getSerializableExtra("send_msg");
 
-        testContact = new Contacts("testCon", "+353857841272", "testkey", true);
+        this.testContact = new Contacts("testCon", "+353xxxxxx", "testkey", true);
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
         List<Message> listMessageData = createMessageList(testContact.getNumber());
@@ -100,17 +100,18 @@ public class SendMessage extends AppCompatActivity {
             public void onClick(View view) {
                 //to send a message first an encryption key must be established
                 if (testContact.getKeySet()) {
-                    // need to initialize key set mechanisim
                     verifyKey();
-                    Log.d("inGETKEY SET", "!!!!!!!!!!!!!!!!!");
-                    Log.d("ENTERED KEYY-------", verifyEnteredKey);
                     /*
-                    if (verifyEnteredKey.equals(testContact.getKey())){
+                    if (keyChecker(verifyEnteredKey)) {
+                        Log.d("Valid key", "!!!!!!!!!!!!!!!!!");
                         sendSms(testContact);
-                    }else {
-                        Toast.makeText(getBaseContext(), "Invalid Cloaked Key",
+                    } else {
+                        Toast.makeText(getBaseContext(), "Invalid  Key",
                                 Toast.LENGTH_LONG).show();
                     }
+                    Log.d("After verifyInvalid key", "!!!!!!!!!!!!!!!!!");
+
+                    Log.d("OUTSDIDE KEY CEHCK", "outside");
                     */
                 }
             }//on click
@@ -171,6 +172,16 @@ public class SendMessage extends AppCompatActivity {
         return messageList;
     }
 
+    public void keyChecker(String entKey) {
+        if (entKey.equals(testContact.getKey())) {
+            Log.d("Valid key", "key confirmed");
+            sendSms(testContact);
+
+        }
+        Toast.makeText(getBaseContext(), "Invalid Cloaked key",
+                Toast.LENGTH_LONG).show();
+
+    }
 
     public void verifyKey() {
         verifyEnteredKey = "";
@@ -190,10 +201,16 @@ public class SendMessage extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 verifyEnteredKey = input.getText().toString();
                 Log.d("ENTERED KEYY in dialog", verifyEnteredKey);
+                // if(verifyEnteredKey.equals(testContact.getKey())){
+                //    return true;
+                // }
+                keyChecker(verifyEnteredKey);
+                Log.d("Before dialog dismiss", verifyEnteredKey);
                 dialog.dismiss();
-
+                Log.d("afteer dialog dismiss", verifyEnteredKey);
 
             }
+
         });
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
@@ -201,13 +218,13 @@ public class SendMessage extends AppCompatActivity {
                 dialog.cancel();
             }
         });
-
+        Log.d("Before builder show", verifyEnteredKey);
         builder.show();
-        // if(verifyEnteredKey.equals(contact.getKey())){
-        //   return true;
-        // }
-        //  return false;
+        Log.d("After builder show", verifyEnteredKey);
+
+
     }
+
     //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
     public void sendSms(Contacts testContact) {
 // a test message to try encryption
