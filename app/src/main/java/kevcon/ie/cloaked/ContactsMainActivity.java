@@ -1,24 +1,14 @@
 package kevcon.ie.cloaked;
 
 import android.app.Activity;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.io.FileOutputStream;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by c-raf on 08/03/2018.
@@ -28,22 +18,54 @@ public class ContactsMainActivity extends Activity {
     Button contactAddButton;
     ListView listContacts;
 
-    ArrayList<Contacts> arrayListContact;
+    //ArrayList<Contacts> arrayListContact;
+    //List<Contacts> contactList;
+
     ContactsAdapter contactAdapter;
     Contacts contacts;
 
     final int C_View=1,C_Delete=2,C_SendMessage=3;
 
+    //database variables
+    public final static String EXTRA_MESSAGE = "MESSAGE";
+    private ListView obj;
+    ContactsHelperDB myDb;
+    List<Contacts> contactList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contacts_activity_main);
 
+        //test contact
+
+        //inilise database
+        myDb = new ContactsHelperDB(this);
+        contactList = myDb.getAllContacts();
+
+        contactAddButton = findViewById(R.id.contactAddButton);
+
+        // DEBUG TO CHECK DATABASE
+        for (Contacts con : contactList) {
+            Log.d("DATACHECK", con.toString());
+        }
+        //add button listener
+        contactAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(ContactsMainActivity.this, Data.class);
+                startActivityForResult(intent, 1);
+
+
+            }
+        });
+
+/*
         arrayListContact=new ArrayList<Contacts>();
 
         listContacts= (ListView) findViewById(R.id.listView);
 
-        contactAddButton= (Button) findViewById(R.id.contactAddButton);
+        c
 
         //add button listener
         contactAddButton.setOnClickListener(new View.OnClickListener() {
@@ -69,9 +91,9 @@ public class ContactsMainActivity extends Activity {
 
             }
         });
-
+*/
     }
-
+/*
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -154,6 +176,7 @@ public class ContactsMainActivity extends Activity {
 
 
     }
+*/
 
 }
 

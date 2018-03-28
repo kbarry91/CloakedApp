@@ -21,6 +21,13 @@ public class Contacts implements Serializable{
         this.key = key;
     }
 
+
+    public Contacts(String name, String number) {
+        this.mName = name;
+        this.mNumber = number;
+        this.isKeySet = false;
+        this.key = "n";
+    }
     public String getName() {
 
         return mName;
@@ -57,5 +64,13 @@ public class Contacts implements Serializable{
         this.key = key;
     }
 
-
+    @Override
+    public String toString() {
+        return "Contacts{" +
+                "mName='" + mName + '\'' +
+                ", mNumber='" + mNumber + '\'' +
+                ", key='" + key + '\'' +
+                ", isKeySet=" + isKeySet +
+                '}';
+    }
 }
