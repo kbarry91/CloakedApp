@@ -133,7 +133,7 @@ public class ContactsMainActivity extends Activity {
 
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 int index = info.position;
-                ;
+
                 Log.e("index",index+" ");
 
                 // delete the contact from the database
@@ -158,11 +158,12 @@ public class ContactsMainActivity extends Activity {
                                         //Change ContactDetails to a SendSms.java
                                         //or something, this will pass the contents into the selected
                                         //index into a class. Ask Kevin which class suits.
+
                 Intent intent7=new Intent(ContactsMainActivity.this,SendMessage.class);
                 AdapterView.AdapterContextMenuInfo info2 = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 int index2 = info2.position;
 
-                intent7.putExtra("send_msg", contactList.get(index2));
+                intent7.putExtra("send_msg", contactAdapter.getItem(index2));
 
                 startActivity(intent7);
 

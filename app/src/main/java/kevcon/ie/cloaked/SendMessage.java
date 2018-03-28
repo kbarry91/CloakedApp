@@ -63,13 +63,13 @@ public class SendMessage extends AppCompatActivity {
         // receive information through intent regarding the contact
         Intent intent;
         intent = getIntent();
-        contact = (Contacts) intent.getSerializableExtra("send_msg");
+        this.testContact = (Contacts) intent.getSerializableExtra("send_msg");
 
         //test getting country code
         String cc = GetCountryZipCode();
         Log.d(READMSG, "DEBUG Country code is : " + cc);
 
-        this.testContact = new Contacts("testCon", "+353xxxxxx", "testkey", true);
+
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
         List<Message> listMessageData = createMessageList(testContact.getNumber());
@@ -85,7 +85,8 @@ public class SendMessage extends AppCompatActivity {
         // set up a toolbar with contacts name and back button to parent activity
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setTitle(contact.getName());
+
+        getSupportActionBar().setTitle(testContact.getName());
 
         //assign Recycle view to view
         messageRec = findViewById(R.id.recycler_view_inbox_list);
@@ -118,6 +119,9 @@ public class SendMessage extends AppCompatActivity {
 
                     Log.d("OUTSDIDE KEY CEHCK", "outside");
                     */
+                } else {
+                    Toast.makeText(getBaseContext(), "No key Set",
+                            Toast.LENGTH_LONG).show();
                 }
             }//on click
         });
@@ -129,15 +133,17 @@ public class SendMessage extends AppCompatActivity {
     * Method to get country code for a number will be moved to add contact*/
     public String GetCountryZipCode() {
 
-        String CountryID = "";
+        String CountryID;
         String CountryZipCode = "";
 
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         //getNetworkCountryIso
         CountryID = manager.getSimCountryIso().toUpperCase();
         String[] rl = this.getResources().getStringArray(R.array.CountryCodes);
-        for (int i = 0; i < rl.length; i++) {
-            String[] g = rl[i].split(",");
+        //optimised for loop
+        for (int i = 0, rlLength = rl.length; i < rlLength; i++) {
+            String aRl = rl[i];
+            String[] g = aRl.split(",");
             if (g[1].trim().equals(CountryID.trim())) {
                 CountryZipCode = g[0];
                 break;
@@ -145,6 +151,7 @@ public class SendMessage extends AppCompatActivity {
         }
         return CountryZipCode;
     }
+
     // a method to populate a list of messages
     public List<Message> createMessageList(String userNumber) {
         List<Message> messageList = new ArrayList<>();
@@ -159,7 +166,7 @@ public class SendMessage extends AppCompatActivity {
         Cursor cur = getContentResolver().query(Uri.parse("content://sms/"), null, numberString, null, null);
 
         // step through each result
-        if (cur.moveToFirst()) {
+        if (cur != null && cur.moveToFirst()) {
             do {
 
                 for (int i = 0; i < cur.getColumnCount(); i++) {
@@ -328,13 +335,20 @@ public class SendMessage extends AppCompatActivity {
 
         //send the message and set receivers
         // sms.sendTextMessage(userNumber, null, strMessage, sentPending, deliveredPending);
-        sms.sendTextMessage(testContact.getNumber(), null, cloakedMessage.toString(), sentPending, deliveredPending);
+        sms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + cloakedMessage.toString(), sentPending, deliveredPending);
         // display notification of message sent
         Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
+
+        // must notify adapter of changes to update message list
+        messageAdp.notifyDataSetChanged();
 
         //reset text field
         user_message.setText(null);
         user_message.setHint(R.string.send_message_hint);
+
+        //restart the activity
+        finish();
+        startActivity(getIntent());
     }
 
 }
