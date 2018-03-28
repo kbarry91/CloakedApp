@@ -3,6 +3,7 @@ package kevcon.ie.cloaked;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ public class Data extends Activity {
     boolean isKeySet = false;
     Button saveButton;
     ContactsHelperDB myDb;
+
+    //ContactsHelperDB myDb2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +28,9 @@ public class Data extends Activity {
 
         //initlise database
         myDb = new ContactsHelperDB(this);
-
+        // myDb2 = new ContactsHelperDB(this);
+        //  myDb2.close();
+        // Log.d("IN PAAAAAGE", "MYDBJUST CLOSED------------- ");
         editName= findViewById(R.id.editName);
         editNumber= findViewById(R.id.editNumber);
 
@@ -42,7 +47,20 @@ public class Data extends Activity {
 
                 // create new contact object and add to database
                 Contacts newContact = new Contacts(contactName, contactNumber);
-                myDb.insertContact(newContact);
+
+
+                if (myDb.insertContact(newContact)) {
+                    myDb.close();
+                    Log.d("ADD CONTACT", " contact added");
+
+                } else {
+
+                    Log.d("ADD CONTACT", " contact add failed");
+                    myDb.close();
+                }
+
+
+                ;
 
                 Intent intent5=new Intent(Data.this,ContactsMainActivity.class);
 

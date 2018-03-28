@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -42,7 +45,7 @@ public class ContactsMainActivity extends Activity {
         //inilise database
         myDb = new ContactsHelperDB(this);
         contactList = myDb.getAllContacts();
-
+        myDb.close();
         contactAddButton = findViewById(R.id.contactAddButton);
 
         // DEBUG TO CHECK DATABASE
@@ -64,21 +67,8 @@ public class ContactsMainActivity extends Activity {
 
        // arrayListContact=new ArrayList<Contacts>();
 
-        listContacts= (ListView) findViewById(R.id.listView);
+        listContacts = findViewById(R.id.listView);
 
-
-
-        //add button listener
-        contactAddButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(ContactsMainActivity.this, Data.class);
-                startActivityForResult(intent, 1);
-
-
-            }
-        });
 
         contactAdapter=new ContactsAdapter(ContactsMainActivity.this,contactList);
 
@@ -93,8 +83,21 @@ public class ContactsMainActivity extends Activity {
             }
         });
 
+
+        //add button listener
+        contactAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(ContactsMainActivity.this, Data.class);
+                startActivityForResult(intent, 1);
+
+
+            }
+        });
+
     }
-/*
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -120,21 +123,34 @@ public class ContactsMainActivity extends Activity {
                 AdapterView.AdapterContextMenuInfo info1 = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 int index1 = info1.position;
 
-                intent6.putExtra("details", arrayListContact.get(index1));
+                intent6.putExtra("details", contactList.get(index1));
 
                 startActivity(intent6);
 
                 break;
 
             case C_Delete:
-                Toast.makeText(ContactsMainActivity.this,"Delete",Toast.LENGTH_SHORT).show();
 
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 int index = info.position;
-
+                ;
                 Log.e("index",index+" ");
-                arrayListContact.remove(index);
-                contactAdapter.notifyDataSetChanged();
+
+                // delete the contact from the database
+                if (myDb.deleteContact(contactAdapter.getItem(index)) == -1) {
+                    Toast.makeText(this, " Failed to delete", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    contactList.remove(index);
+
+                    contactAdapter.notifyDataSetChanged();
+                    Toast.makeText(this, "Contact deleted", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
 
                 break;
 
@@ -146,7 +162,7 @@ public class ContactsMainActivity extends Activity {
                 AdapterView.AdapterContextMenuInfo info2 = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 int index2 = info2.position;
 
-                intent7.putExtra("send_msg", arrayListContact.get(index2));
+                intent7.putExtra("send_msg", contactList.get(index2));
 
                 startActivity(intent7);
 
@@ -168,7 +184,7 @@ public class ContactsMainActivity extends Activity {
             contacts = (Contacts) data.getSerializableExtra("data");
 
 
-            arrayListContact.add(contacts);
+            contactList.add(contacts);
             contactAdapter.notifyDataSetChanged();
 
 
@@ -177,18 +193,7 @@ public class ContactsMainActivity extends Activity {
 
 
     }
-*/
+
 
 }
 
-/*
-
-//Retrieve the values
-Set<String> set = myScores.getStringSet("key", null);
-
-//Set the values
-Set<String> set = new HashSet<String>();
-set.addAll(listOfExistingScores);
-scoreEditor.putStringSet("key", set);
-scoreEditor.commit();
- */

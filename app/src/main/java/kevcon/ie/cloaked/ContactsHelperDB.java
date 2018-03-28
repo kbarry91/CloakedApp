@@ -23,7 +23,7 @@ public class ContactsHelperDB extends SQLiteOpenHelper {
     public static final String CONTACTS_COLUMN_NAME = "name";
     public static final String CONTACTS_COLUMN_PHONE = "phone";
     public static final String CONTACTS_COLUMN_KEY = "cKey";
-    public static final String CONTACTS_COLUMN_ISKEYSET = "isKey";
+    public static final String CONTACTS_COLUMN_ISKEYSET = "isKeySet";
     private HashMap hp;
 
     public ContactsHelperDB(Context context) {
@@ -34,10 +34,16 @@ public class ContactsHelperDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
+
+        // String createContactTable="CREATE TABLE "+ CONTACTS_TABLE_NAME+"("+CONTACTS_COLUMN_NAME+" TEXT PRIMARY KEY,"+CONTACTS_COLUMN_PHONE+" TEXT,"+CONTACTS_COLUMN_KEY+" TEXT,"+CONTACTS_COLUMN_ISKEYSET+" INT"+")";
+
+        //  db.execSQL(createContactTable);
+
         db.execSQL(
                 "create table contacts " +
-                        "(name text primary key,phone text,cKey text,isKey text)"
+                        "(name text primary key,phone text,cKey text,isKeySet int)"
         );
+
     }
 
 
@@ -57,21 +63,28 @@ public class ContactsHelperDB extends SQLiteOpenHelper {
         contentValues.put("name", newContact.getName());
         contentValues.put("phone", newContact.getNumber());
         contentValues.put("cKey", newContact.getKey());
-        contentValues.put("isKey", newContact.getKeySet());
+        int flag = (newContact.getKeySet()) ? 1 : 0;
+        contentValues.put("isKeySet", flag);
 
-        db.insert("contacts", null, contentValues);
+        if (db.insert("contacts", null, contentValues) == -1) {
+            db.close();
+            return false;
+        }
+        db.close();
         return true;
     }
 
     public Cursor getData(Contacts contact) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from contacts where name like " + contact.getName() + "", null);
+        db.close();
         return res;
     }
 
     public int numberOfRows(){
         SQLiteDatabase db = this.getReadableDatabase();
         int numRows = (int) DatabaseUtils.queryNumEntries(db, CONTACTS_TABLE_NAME);
+        db.close();
         return numRows;
     }
 
@@ -81,17 +94,22 @@ public class ContactsHelperDB extends SQLiteOpenHelper {
         contentValues.put("name", newContact.getName());
         contentValues.put("phone", newContact.getNumber());
         contentValues.put("cKey", newContact.getKey());
-        contentValues.put("isSet", newContact.getKeySet());
+        int flag = (newContact.getKeySet()) ? 1 : 0;
+        contentValues.put("isKeySet", flag);
         db.update("contacts", contentValues, "name like ? ", new String[]{newContact.getName()});
+        db.close();
         return true;
     }
 
     // remove a contact from database
     public Integer deleteContact(Contacts contact) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete("contacts",
+        int deleteStatus = db.delete("contacts",
                 "name like ? ",
                 new String[]{contact.getName()});
+        db.close();
+        return deleteStatus;
+
     }
 
     //load a list of Contacts
@@ -103,7 +121,7 @@ public class ContactsHelperDB extends SQLiteOpenHelper {
         String name;
         String phone;
         String cKey;
-        Boolean isKey;
+        Boolean isKeySet;
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -118,12 +136,13 @@ public class ContactsHelperDB extends SQLiteOpenHelper {
             phone = res.getString(res.getColumnIndex(CONTACTS_COLUMN_PHONE));
             cKey = res.getString(res.getColumnIndex(CONTACTS_COLUMN_KEY));
             // might have to change
-            isKey = res.getInt(res.getColumnIndex(CONTACTS_COLUMN_ISKEYSET)) > 0;
-
+            //isKeySet = res.getInt(res.getColumnIndex(CONTACTS_COLUMN_ISKEYSET)) > 0;
+            isKeySet = res.getInt(res.getColumnIndex(CONTACTS_COLUMN_ISKEYSET)) == 1;
             res.moveToNext();
-            contact = new Contacts(name, phone, cKey, isKey);
+            contact = new Contacts(name, phone, cKey, isKeySet);
             contactList.add(contact);
         }
+        db.close();
         return contactList;
     }
 }

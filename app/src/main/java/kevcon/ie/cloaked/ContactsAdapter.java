@@ -6,10 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,8 +30,10 @@ public class ContactsAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return null;
+    public Contacts getItem(int position) {
+        Contacts contacts;
+        contacts = contactList.get(position);
+        return contacts;
     }
 
     @Override
@@ -63,6 +63,7 @@ public class ContactsAdapter extends BaseAdapter {
 
 
         Contacts contacts=contactList.get(position);
+
         contactName.setText(contacts.getName());
         System.getProperty("line.separator");
         Log.e("name", contacts.getName() + " ");
