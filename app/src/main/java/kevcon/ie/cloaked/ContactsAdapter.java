@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by c-raf on 08/03/2018.
@@ -18,16 +19,16 @@ import java.util.ArrayList;
 public class ContactsAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Contacts> contact;
+    private List<Contacts> contactList;
 
-    public ContactsAdapter(Context context, ArrayList<Contacts> contact) {
+    public ContactsAdapter(Context context, List<Contacts> contact) {
         this.context = context;
-        this.contact = contact;
+        this.contactList = contact;
     }
 
     @Override
     public int getCount() {
-        return contact.size();
+        return contactList.size();
     }
 
     @Override
@@ -61,7 +62,7 @@ public class ContactsAdapter extends BaseAdapter {
         //get data
 
 
-        Contacts contacts=contact.get(position);
+        Contacts contacts=contactList.get(position);
         contactName.setText(contacts.getName());
         System.getProperty("line.separator");
         Log.e("name", contacts.getName() + " ");

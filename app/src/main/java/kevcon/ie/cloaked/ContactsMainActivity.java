@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -60,12 +61,12 @@ public class ContactsMainActivity extends Activity {
             }
         });
 
-/*
-        arrayListContact=new ArrayList<Contacts>();
+
+       // arrayListContact=new ArrayList<Contacts>();
 
         listContacts= (ListView) findViewById(R.id.listView);
 
-        c
+
 
         //add button listener
         contactAddButton.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +80,7 @@ public class ContactsMainActivity extends Activity {
             }
         });
 
-        contactAdapter=new ContactsAdapter(ContactsMainActivity.this,arrayListContact);
+        contactAdapter=new ContactsAdapter(ContactsMainActivity.this,contactList);
 
         listContacts.setAdapter(contactAdapter);
 
@@ -91,7 +92,7 @@ public class ContactsMainActivity extends Activity {
 
             }
         });
-*/
+
     }
 /*
     @Override
