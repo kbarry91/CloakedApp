@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,8 +67,10 @@ public class SendMessage extends AppCompatActivity {
         this.testContact = (Contacts) intent.getSerializableExtra("send_msg");
 
         //test getting country code
-        String cc = GetCountryZipCode();
-        Log.d(READMSG, "DEBUG Country code is : " + cc);
+        //  String cc = GetCountryZipCode();
+        //   String testConvNumber = Utils.addCountryCode(cc,testContact.getNumber());
+
+        //  Log.d("COUNTRY CHECK", "DEBUG number  is : " +testConvNumber);
 
 
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -130,29 +131,6 @@ public class SendMessage extends AppCompatActivity {
         });
 
 
-    }
-
-    /*
-    * Method to get country code for a number will be moved to add contact*/
-    public String GetCountryZipCode() {
-
-        String CountryID;
-        String CountryZipCode = "";
-
-        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        //getNetworkCountryIso
-        CountryID = manager.getSimCountryIso().toUpperCase();
-        String[] rl = this.getResources().getStringArray(R.array.CountryCodes);
-        //optimised for loop
-        for (int i = 0, rlLength = rl.length; i < rlLength; i++) {
-            String aRl = rl[i];
-            String[] g = aRl.split(",");
-            if (g[1].trim().equals(CountryID.trim())) {
-                CountryZipCode = g[0];
-                break;
-            }
-        }
-        return CountryZipCode;
     }
 
     // a method to populate a list of messages
@@ -354,6 +332,12 @@ public class SendMessage extends AppCompatActivity {
         // must notify adapter of changes to update message list
         messageAdp.notifyItemInserted(listMessageData.size() - 1);
 
+        //debug
+        for (Message mes : listMessageData)
+
+        {
+            mes.toString();
+        }
         //reset text field
         user_message.setText(null);
         user_message.setHint(R.string.send_message_hint);

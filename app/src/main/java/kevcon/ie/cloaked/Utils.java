@@ -25,4 +25,13 @@ public class Utils {
         return dateString;
     }
 
+    /**
+     * addCountryCode removes the 0 from the number and appends country formating
+     */
+    public static String addCountryCode(String countryCode, String number) {
+
+        String newNumber = number.replaceFirst("0", "+" + countryCode);
+        return newNumber;
+    }
+
 }

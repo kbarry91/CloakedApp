@@ -60,7 +60,7 @@ public class Message {
 
     @Override
     public String toString() {
-        return "M:" + message + " S: " + sender + " T: " + type + " D: " + time;
+        return "---------M:" + message + " S: " + sender + " T: " + type + " D: " + time;
     }
 }
 
