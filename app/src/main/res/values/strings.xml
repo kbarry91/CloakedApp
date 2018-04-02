@@ -49,6 +49,11 @@
     <!-- Key Entry Dialog -->
     <string name="enter_key">Enter Cloaked key</string>
 
+    <!-- Message Menu-->
+    <string name="viewMsg">Decrypt </string>
+    <string name="delMsg">Delete</string>
+    <string name="moreMsg">More..</string>
+
     <!-- Country codes -->
     <string-array name="CountryCodes">
         <item>93,AF</item>

@@ -1,11 +1,13 @@
 package kevcon.ie.cloaked;
 
 import android.content.Context;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -96,14 +98,45 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getMessage());
             timeText.setText(Utils.convertDate(message.getTime()));
-            // Format the stored timestamp into a readable String using method.
-            //timeText.setText(Utils.formatDateTime(message.getCreatedAt()));/////////////////////////need to make a utill class for generic methods
+
+            // a pop down menu to display options on message
+            messageText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // define a pop up menu
+                    PopupMenu msgMenu = new PopupMenu(ctx, messageText);
+
+                    // inflate the menu view
+                    msgMenu.inflate(R.menu.message_menu);
+
+                    // Add listener
+                    msgMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.menu1:
+                                    Log.d("MENNNU", "onMenuItemClick:1 ");
+                                    break;
+                                case R.id.menu2:
+                                    Log.d("MENNNU", "onMenuItemClick:1 ");
+                                    break;
+                                case R.id.menu3:
+                                    Log.d("MENNNU", "onMenuItemClick:1 ");
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
+                    //displaying the popup
+                    msgMenu.show();
+                }
+            });
+
         }
     }
 
     private class messageInHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText, nameText;
-        ImageView profileImage;
 
         messageInHolder(View view) {
 
@@ -122,9 +155,39 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
 
             // timeText.setText(message.getTime());
             nameText.setText(message.getSender());
+            // a pop down menu to display options on message
+            messageText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // define a pop up menu
+                    PopupMenu msgMenu = new PopupMenu(ctx, messageText);
 
-            // Insert the profile image from the URL into the ImageView.
-            // Utils.displayRoundImageFromUrl(mContext, message.getSender(), profileImage);
+                    // inflate the menu view
+                    msgMenu.inflate(R.menu.message_menu);
+
+                    // Add listener
+                    msgMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.menu1:
+                                    Log.d("MENNNU", "onMenuItemClick:1 ");
+                                    break;
+                                case R.id.menu2:
+                                    Log.d("MENNNU", "onMenuItemClick:1 ");
+                                    break;
+                                case R.id.menu3:
+                                    Log.d("MENNNU", "onMenuItemClick:1 ");
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
+                    //displaying the popup
+                    msgMenu.show();
+                }
+            });
+
         }
     }
 }

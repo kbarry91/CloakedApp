@@ -90,13 +90,18 @@ public class SendMessage extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        getSupportActionBar().setTitle(testContact.getName());
+        if (testContact.getName() != null) {
+            getSupportActionBar().setTitle(testContact.getName());
+        }
+
 
         //assign Recycle view to view
         messageRec = findViewById(R.id.recycler_view_inbox_list);
         messageAdp = new MessageViewAdapter(this, listMessageData);
         messageRec.setLayoutManager(new LinearLayoutManager(this));
         messageRec.setAdapter(messageAdp);
+
+        //add a click action to messages in list
 
         //getSupportActionBar().setHomeButtonEnabled(true);
         //assign user_message and button to view
@@ -332,12 +337,7 @@ public class SendMessage extends AppCompatActivity {
         // must notify adapter of changes to update message list
         messageAdp.notifyItemInserted(listMessageData.size() - 1);
 
-        //debug
-        for (Message mes : listMessageData)
 
-        {
-            mes.toString();
-        }
         //reset text field
         user_message.setText(null);
         user_message.setHint(R.string.send_message_hint);
