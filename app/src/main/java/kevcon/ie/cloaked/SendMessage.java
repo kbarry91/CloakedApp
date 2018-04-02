@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.app.AlertDialog.Builder;
@@ -47,6 +48,7 @@ public class SendMessage extends AppCompatActivity {
     private RecyclerView messageRec;
     private MessageViewAdapter messageAdp;
 
+    private List<Message> listMessageData;
     // initialize contact
     Contacts contact;
     Contacts testContact;
@@ -72,7 +74,8 @@ public class SendMessage extends AppCompatActivity {
 
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
-        List<Message> listMessageData = createMessageList(testContact.getNumber());
+        this.listMessageData = createMessageList(testContact.getNumber());
+        //List<Message> listMessageData = createMessageList(testContact.getNumber());
 
         //test list is populating
         for (Message msg : listMessageData) {
@@ -201,6 +204,9 @@ public class SendMessage extends AppCompatActivity {
 
         // cursor must be closed and recycled
         cur.close();
+
+        //reverse the list to display messages in order
+        Collections.reverse(messageList);
         return messageList;
     }
 
@@ -290,6 +296,7 @@ public class SendMessage extends AppCompatActivity {
             public void onReceive(Context arg0, Intent arg1) {
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
+
                         Toast.makeText(getBaseContext(), "SMS Sent.",
                                 Toast.LENGTH_LONG).show();
                         break;
@@ -339,16 +346,21 @@ public class SendMessage extends AppCompatActivity {
         // display notification of message sent
         Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
 
+        // create a new message object
+        Message newMessage = new Message("Sent From Cloaked:" + cloakedMessage.toString(), testContact.getNumber(), Long.toString(System.currentTimeMillis()), 2);
+
+        // add the new message to the list
+        listMessageData.add(newMessage);
         // must notify adapter of changes to update message list
-        messageAdp.notifyDataSetChanged();
+        messageAdp.notifyItemInserted(listMessageData.size() - 1);
 
         //reset text field
         user_message.setText(null);
         user_message.setHint(R.string.send_message_hint);
 
         //restart the activity
-        finish();
-        startActivity(getIntent());
+        // finish();
+        //  startActivity(getIntent());
     }
 
 }
