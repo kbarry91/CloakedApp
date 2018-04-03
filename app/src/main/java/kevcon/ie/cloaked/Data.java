@@ -1,14 +1,19 @@
 package kevcon.ie.cloaked;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by c-raf on 08/03/2018.
@@ -21,7 +26,6 @@ public class Data extends Activity {
     boolean isKeySet = false;
     Button saveButton;
     ContactsHelperDB myDb;
-
 
     //ContactsHelperDB myDb2;
     @Override
@@ -63,6 +67,13 @@ public class Data extends Activity {
 
                 if (myDb.insertContact(newContact)) {
 
+
+                    SendMessage send = new SendMessage();
+
+                    String initialMsg = "I would like to start a convo on cloaked";
+
+                    sendInitialMsg(newContact, initialMsg);
+
                     myDb.close();
                     Log.d("ADD CONTACT", " contact added");
 
@@ -72,6 +83,8 @@ public class Data extends Activity {
                     myDb.close();
                 }
 
+
+                ;
 
                 Intent intent5 = new Intent(Data.this, ContactsMainActivity.class);
 
@@ -111,5 +124,70 @@ public class Data extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
 
+    }
+
+
+    //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
+    public void sendInitialMsg(final Contacts testContact, String txtMsg) {
+
+        SmsManager mySms = SmsManager.getDefault();
+
+        Context curContext = this.getApplicationContext();
+
+        // must create intents to Check if sms is sent and delivered
+        PendingIntent sentPending = PendingIntent.getBroadcast(curContext,
+                0, new Intent("SENT"), 0);
+
+        // receiver intent to return result of  Broadcast
+        curContext.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode()) {
+                    case Activity.RESULT_OK:
+
+                        Toast.makeText(getBaseContext(), "Sending request to " + testContact.getName() + " to download Cloaked",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        Toast.makeText(getBaseContext(), "SMS Not Sent: Generic failure.",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Toast.makeText(getBaseContext(), "SMS Not Sent: No service ",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        Toast.makeText(getBaseContext(), "Not Sent: Null PDU.",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        Toast.makeText(getBaseContext(), "Not Sent: Ensure Airplane mode is disabled",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+        }, new IntentFilter("SENT"));
+
+        PendingIntent deliveredPending = PendingIntent.getBroadcast(curContext,
+                0, new Intent("DELIVERED"), 0);
+
+        curContext.registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context arg0, Intent arg1) {
+                        switch (getResultCode()) {
+                            case Activity.RESULT_OK:
+                                Toast.makeText(getBaseContext(), "Delivered.",
+                                        Toast.LENGTH_LONG).show();
+                                break;
+                            case Activity.RESULT_CANCELED:
+                                Toast.makeText(getBaseContext(), "Not Delivered: Canceled.",
+                                        Toast.LENGTH_LONG).show();
+                                break;
+                        }
+                    }
+                }, new IntentFilter("DELIVERED"));
+
+        mySms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + txtMsg, sentPending, deliveredPending);
     }
 }
