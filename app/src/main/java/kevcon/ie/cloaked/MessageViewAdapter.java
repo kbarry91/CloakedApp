@@ -124,6 +124,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
                                     Log.d("MENNNU", "onMenuItemClick:1 ");
                                     if (contact.getKeySet()) {
                                         startDecrypt(strMessage, contact, ctx);
+
                                     }
                                     break;
                                 case R.id.menu2:

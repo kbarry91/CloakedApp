@@ -128,6 +128,10 @@ public class SendMessage extends AppCompatActivity {
                     Log.d("OUTSDIDE KEY CEHCK", "outside");
                     */
                 } else {
+                    //   KeyController.setNewKey(testContact,getBaseContext());
+
+                    KeyController kc = new KeyController();
+                    kc.setNewKey(testContact, SendMessage.this);
                     Toast.makeText(getBaseContext(), "No key Set",
                             Toast.LENGTH_LONG).show();
                 }

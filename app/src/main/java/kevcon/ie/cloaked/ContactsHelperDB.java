@@ -67,6 +67,7 @@ public class ContactsHelperDB extends SQLiteOpenHelper {
         contentValues.put("isKeySet", flag);
 
         if (db.insert("contacts", null, contentValues) == -1) {
+
             db.close();
             return false;
         }

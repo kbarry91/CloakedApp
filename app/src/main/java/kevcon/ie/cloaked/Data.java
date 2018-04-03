@@ -22,6 +22,7 @@ public class Data extends Activity {
     Button saveButton;
     ContactsHelperDB myDb;
 
+
     //ContactsHelperDB myDb2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class Data extends Activity {
 
 
                 if (myDb.insertContact(newContact)) {
+
                     myDb.close();
                     Log.d("ADD CONTACT", " contact added");
 
@@ -70,8 +72,6 @@ public class Data extends Activity {
                     myDb.close();
                 }
 
-
-                ;
 
                 Intent intent5 = new Intent(Data.this, ContactsMainActivity.class);
 

@@ -42,7 +42,7 @@ public class ContactsMainActivity extends Activity {
 
         //test contact
 
-        //inilise database
+        // inilise database
         myDb = new ContactsHelperDB(this);
         contactList = myDb.getAllContacts();
         myDb.close();

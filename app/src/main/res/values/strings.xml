@@ -49,6 +49,9 @@
     <!-- Key Entry Dialog -->
     <string name="enter_key">Enter Cloaked key</string>
 
+    <!-- Key Set Dialog -->
+    <string name="set_key">Set a new key</string>
+
     <!-- Message pop up-->
     <string name="okOption"> OK </string>
     <!-- Message Menu-->
