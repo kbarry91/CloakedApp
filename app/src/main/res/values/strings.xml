@@ -49,6 +49,8 @@
     <!-- Key Entry Dialog -->
     <string name="enter_key">Enter Cloaked key</string>
 
+    <!-- Message pop up-->
+    <string name="okOption"> OK </string>
     <!-- Message Menu-->
     <string name="viewMsg">Decrypt </string>
     <string name="delMsg">Delete</string>

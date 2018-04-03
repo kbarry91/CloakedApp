@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -76,7 +78,7 @@ public class Encryption {
     }// encrypt
 
     // Method to verify key
-    public static void startDecrypt(String messageText, final Contacts contact, final Context ctx) {
+    public static void startDecrypt(final String messageText, final Contacts contact, final Context ctx) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setTitle("Cloaked Key");
@@ -94,20 +96,39 @@ public class Encryption {
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String keyEntered = "";
+                String keyEntered;
                 keyEntered = input.getText().toString();
                 if (keyEntered.equals(contact.getKey())) {
+
                     //pop up dialog to display message
-                    Dialog msgDialog = new Dialog(ctx);
+                    final Dialog msgDialog = new Dialog(ctx);
+                    msgDialog.setContentView(R.layout.view_message_dialog);
+                    msgDialog.setTitle("Decrypted message");
+
+                    TextView decMsg = msgDialog.findViewById(R.id.decrypted_text);
+                    // set the pop up text
+                    decMsg.setText(messageText);
+                    Log.d("DEC CHECK", "imported message" + messageText);
+                    //    decMsg.setText("tessssssssssssssst");
+
+                    Button dialogButton = msgDialog.findViewById(R.id.decrypted_button);
+
+                    // Close the dialog on click
+                    dialogButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            msgDialog.dismiss();
+                        }
+                    });
+
+                    msgDialog.show();
+
                 } else {
                     Toast.makeText(ctx, "Invalid key",
                             Toast.LENGTH_LONG).show();
                 }
                 Log.d("ENTERED KEYY in dialog", keyEntered);
-                // if(verifyEnteredKey.equals(testContact.getKey())){
-                //    return true;
-                // }
-                //   keyChecker(verifyEnteredKey);
+
                 dialog.dismiss();
 
             }
