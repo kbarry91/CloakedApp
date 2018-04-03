@@ -271,6 +271,7 @@ public class SendMessage extends AppCompatActivity {
 
         SmsManager sms = SmsManager.getDefault();
 
+
         Context curContext = this.getApplicationContext();
 
         // must create intents to Check if sms is sent and delivered
@@ -348,5 +349,19 @@ public class SendMessage extends AppCompatActivity {
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
