@@ -18,7 +18,7 @@ import android.widget.Toast;
  * @author kevin barry
  */
 public class Encryption {
-
+    final static String DTAG = "DEBUGTAG";
     static int keyLetter = 0;
     public static final String[][] tableau = {
             {"KEYS", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
@@ -50,11 +50,17 @@ public class Encryption {
             {"YZ", "Z", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "B", "C", "D", "E", "F", "G", "H",
                     "I", "J", "K", "L", "M", "A"}};// public static final
 
-
+    /**
+     * Apply swap cipher to letter using keyLetter.
+     *
+     * @param letter    The char to be encrypted
+     * @param cipherKey The cipher key
+     * @return The encrypted char
+     */
     public static char encrypt(char letter, String cipherKey) {
-
+        Log.d(DTAG, "-----keyletter    : " + keyLetter + "-");
         int row = 0;
-        int col;
+        int col = 0;
 
         // can remove this loop
         if ((int) letter > 64 && (int) letter < 91) {
@@ -74,22 +80,42 @@ public class Encryption {
             }
             letter = tableau[row][col].charAt(0);
         }
+
+
         return letter;
     }// encrypt
 
+    /**
+     * Parse the message char b y char to the cipher.
+     *
+     * @param message    The message to be encrypted
+     * @param cloakedKey The encryption key
+     * @return The encrypted message
+     */
     public static String DecryptMessage(String message, String cloakedKey) {
         StringBuilder cloakedMessage = new StringBuilder();
 
         //to send a message first an encryption key must be established
-
+        Log.d(DTAG, "-----Origonal Message : " + message + "-");
+        Log.d(DTAG, "-----Origonal Key     : " + cloakedKey + "-");
+        //
         // start at 18 , first 18 chars are defaulted
         int pos = 18;
         int sentLength = message.length();
+        Log.d(DTAG, "-----Message length: " + (message.length() - 18) + "-");
         while (pos < sentLength) {// while end of sentence not reached
+
             char letter = encrypt(Character.toUpperCase(message.charAt(pos)), cloakedKey.toUpperCase());
+            Log.d(DTAG, "-----Before ENC     : " + Character.toUpperCase(message.charAt(pos)) + "-");
+            Log.d(DTAG, "-----After ENC      : " + letter + "-");
+            Log.d(DTAG, "-----cloak before    : " + cloakedMessage.toString() + "-");
             cloakedMessage.append(letter);
+            Log.d(DTAG, "-----cloak after     : " + cloakedMessage.toString() + "-");
             pos++;
         } // while
+
+        // Reset keyLetter to 0 for next encryption
+        keyLetter = 0;
         return cloakedMessage.toString();
     }
 
