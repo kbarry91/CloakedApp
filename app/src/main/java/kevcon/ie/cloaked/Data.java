@@ -93,6 +93,7 @@ public class Data extends Activity {
         //getNetworkCountryIso
         CountryID = manager.getSimCountryIso().toUpperCase();
         String[] rl = this.getResources().getStringArray(R.array.CountryCodes);
+
         //optimised for loop
         for (int i = 0, rlLength = rl.length; i < rlLength; i++) {
             String aRl = rl[i];

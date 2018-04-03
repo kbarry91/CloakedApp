@@ -250,7 +250,7 @@ public class SendMessage extends AppCompatActivity {
     //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
     public void sendSms(Contacts testContact) {
 // a test message to try encryption
-        String testMessage = user_message.getText().toString();
+        String testMessage = "Sent From Cloaked:" + user_message.getText().toString();
         /*
         StringBuilder cloakedMessage = new StringBuilder();
 
