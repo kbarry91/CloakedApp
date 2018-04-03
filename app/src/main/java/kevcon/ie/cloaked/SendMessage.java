@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static android.app.AlertDialog.Builder;
+import static kevcon.ie.cloaked.Encryption.DecryptMessage;
 
 /**
  * <h1>SendMessage</h1>
@@ -90,9 +91,7 @@ public class SendMessage extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        if (testContact.getName() != null) {
-            getSupportActionBar().setTitle(testContact.getName());
-        }
+        if (testContact.getName() != null) getSupportActionBar().setTitle(testContact.getName());
 
 
         //assign Recycle view to view
@@ -186,7 +185,9 @@ public class SendMessage extends AppCompatActivity {
         }
 
         // cursor must be closed and recycled
-        cur.close();
+        if (cur != null) {
+            cur.close();
+        }
 
         //reverse the list to display messages in order
         Collections.reverse(messageList);
@@ -198,10 +199,10 @@ public class SendMessage extends AppCompatActivity {
             Log.d("Valid key", "key confirmed");
             sendSms(testContact);
 
+        } else {
+            Toast.makeText(getBaseContext(), "Invalid Cloaked key",
+                    Toast.LENGTH_LONG).show();
         }
-        Toast.makeText(getBaseContext(), "Invalid Cloaked key",
-                Toast.LENGTH_LONG).show();
-
     }
 
     public void verifyKey() {
@@ -250,6 +251,7 @@ public class SendMessage extends AppCompatActivity {
     public void sendSms(Contacts testContact) {
 // a test message to try encryption
         String testMessage = user_message.getText().toString();
+        /*
         StringBuilder cloakedMessage = new StringBuilder();
 
         //to send a message first an encryption key must be established
@@ -261,9 +263,11 @@ public class SendMessage extends AppCompatActivity {
             cloakedMessage.append(letter);
             pos++;
         } // while
+        */
+        String cloakedMessage = DecryptMessage(testMessage, testContact.getKey());
 
         Log.d(TAG, "Attempting to send sms");
-        String strMessage = "sent from cloaked app: " + user_message.getText().toString();
+        //  String strMessage = "sent from cloaked app: " + user_message.getText().toString();
 
         SmsManager sms = SmsManager.getDefault();
 
@@ -325,12 +329,12 @@ public class SendMessage extends AppCompatActivity {
 
         //send the message and set receivers
         // sms.sendTextMessage(userNumber, null, strMessage, sentPending, deliveredPending);
-        sms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + cloakedMessage.toString(), sentPending, deliveredPending);
+        sms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + cloakedMessage, sentPending, deliveredPending);
         // display notification of message sent
         Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
 
         // create a new message object
-        Message newMessage = new Message("Sent From Cloaked:" + cloakedMessage.toString(), testContact.getNumber(), Long.toString(System.currentTimeMillis()), 2);
+        Message newMessage = new Message("Sent From Cloaked:" + cloakedMessage, testContact.getNumber(), Long.toString(System.currentTimeMillis()), 2);
 
         // add the new message to the list
         listMessageData.add(newMessage);
@@ -342,9 +346,7 @@ public class SendMessage extends AppCompatActivity {
         user_message.setText(null);
         user_message.setHint(R.string.send_message_hint);
 
-        //restart the activity
-        // finish();
-        //  startActivity(getIntent());
+
     }
 
 }

@@ -11,7 +11,7 @@
     <string name="register_password">Enter a Password</string>
     <string name="register_key">Key</string>
     <string name="register_username">Enter a Username</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="register_fullname">Enter Full Name</string>
     <string name="phone_number">Enter Phone Number</string>
