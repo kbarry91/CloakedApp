@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import static kevcon.ie.cloaked.Encryption.startDecrypt;
+
 /**
  * <h1>MessageViewAdapter</h1>
  * MessageViewAdapter is a RecyclerView holder to bind a large data set of @Message objects to a limited view
@@ -22,11 +24,14 @@ import java.util.List;
 public class MessageViewAdapter extends RecyclerView.Adapter {
     private Context ctx;
     private List<Message> listMessageData;
+    private Contacts contact;
+
 
     //Constructor
-    public MessageViewAdapter(Context ctx, List<Message> listMessageData) {
+    public MessageViewAdapter(Context ctx, List<Message> listMessageData, Contacts contact) {
         this.ctx = ctx;
         this.listMessageData = listMessageData;
+        this.contact = contact;
     }
 
     @Override
@@ -116,6 +121,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
                             switch (item.getItemId()) {
                                 case R.id.menu1:
                                     Log.d("MENNNU", "onMenuItemClick:1 ");
+
                                     break;
                                 case R.id.menu2:
                                     Log.d("MENNNU", "onMenuItemClick:1 ");
@@ -148,6 +154,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
         }
 
         void bind(Message message) {
+            final String strMessage = message.getMessage();
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
@@ -172,6 +179,9 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
                             switch (item.getItemId()) {
                                 case R.id.menu1:
                                     Log.d("MENNNU", "onMenuItemClick:1 ");
+                                    if (contact.getKeySet()) {
+                                        startDecrypt(strMessage, contact, ctx);
+                                    }
                                     break;
                                 case R.id.menu2:
                                     Log.d("MENNNU", "onMenuItemClick:1 ");

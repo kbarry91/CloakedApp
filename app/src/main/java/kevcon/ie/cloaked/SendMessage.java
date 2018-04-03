@@ -97,7 +97,7 @@ public class SendMessage extends AppCompatActivity {
 
         //assign Recycle view to view
         messageRec = findViewById(R.id.recycler_view_inbox_list);
-        messageAdp = new MessageViewAdapter(this, listMessageData);
+        messageAdp = new MessageViewAdapter(this, listMessageData, testContact);
         messageRec.setLayoutManager(new LinearLayoutManager(this));
         messageRec.setAdapter(messageAdp);
 
