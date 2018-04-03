@@ -101,6 +101,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
         }
 
         void bind(Message message) {
+            final String strMessage = message.getMessage();
             messageText.setText(message.getMessage());
             timeText.setText(Utils.convertDate(message.getTime()));
 
@@ -121,7 +122,9 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
                             switch (item.getItemId()) {
                                 case R.id.menu1:
                                     Log.d("MENNNU", "onMenuItemClick:1 ");
-
+                                    if (contact.getKeySet()) {
+                                        startDecrypt(strMessage, contact, ctx);
+                                    }
                                     break;
                                 case R.id.menu2:
                                     Log.d("MENNNU", "onMenuItemClick:1 ");
@@ -162,6 +165,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
 
             // timeText.setText(message.getTime());
             nameText.setText(message.getSender());
+
             // a pop down menu to display options on message
             messageText.setOnClickListener(new View.OnClickListener() {
                 @Override

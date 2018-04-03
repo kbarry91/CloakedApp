@@ -77,6 +77,22 @@ public class Encryption {
         return letter;
     }// encrypt
 
+    public static String DecryptMessage(String message, String cloakedKey) {
+        StringBuilder cloakedMessage = new StringBuilder();
+
+        //to send a message first an encryption key must be established
+
+        // start at 18 , first 18 chars are defaulted
+        int pos = 18;
+        int sentLength = message.length();
+        while (pos < sentLength) {// while end of sentence not reached
+            char letter = encrypt(Character.toUpperCase(message.charAt(pos)), cloakedKey.toUpperCase());
+            cloakedMessage.append(letter);
+            pos++;
+        } // while
+        return cloakedMessage.toString();
+    }
+
     // Method to verify key
     public static void startDecrypt(final String messageText, final Contacts contact, final Context ctx) {
 
@@ -106,10 +122,13 @@ public class Encryption {
                     msgDialog.setTitle("Decrypted message");
 
                     TextView decMsg = msgDialog.findViewById(R.id.decrypted_text);
+
+                    // decrypt the message
+                    String decryptMsg = DecryptMessage(messageText, contact.getKey());
                     // set the pop up text
-                    decMsg.setText(messageText);
+                    decMsg.setText(decryptMsg);
+
                     Log.d("DEC CHECK", "imported message" + messageText);
-                    //    decMsg.setText("tessssssssssssssst");
 
                     Button dialogButton = msgDialog.findViewById(R.id.decrypted_button);
 
