@@ -55,6 +55,7 @@ public class KeyController extends Activity {
                         Toast.makeText(ctx, "Key Set Success",
                                 Toast.LENGTH_LONG).show();
 
+                        Utils.sendMessage(contact, scrambleKey(contact), ctx);
                         //  SendMessage sm = new SendMessage();
                         //  sm.sendSms(contact,"Notification from Cloaked please launch app :"+scrambleKey(contact));
                         //  SendMessage.sendSms();
