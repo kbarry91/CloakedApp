@@ -68,7 +68,6 @@ public class Data extends Activity {
                 if (myDb.insertContact(newContact)) {
 
 
-                    SendMessage send = new SendMessage();
 
                     String initialMsg = "I would like to start a convo on cloaked";
 
@@ -84,7 +83,7 @@ public class Data extends Activity {
                 }
 
 
-                ;
+
 
                 Intent intent5 = new Intent(Data.this, ContactsMainActivity.class);
 
@@ -132,7 +131,7 @@ public class Data extends Activity {
 
         SmsManager mySms = SmsManager.getDefault();
 
-        Context curContext = this.getApplicationContext();
+        Context curContext = Data.this;
 
         // must create intents to Check if sms is sent and delivered
         PendingIntent sentPending = PendingIntent.getBroadcast(curContext,

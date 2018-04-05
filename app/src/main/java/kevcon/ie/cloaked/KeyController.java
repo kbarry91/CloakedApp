@@ -1,5 +1,6 @@
 package kevcon.ie.cloaked;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,18 +10,20 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Random;
+
 /**
  * @author kevin barry
  */
 
-public class KeyController {
+public class KeyController extends Activity {
     // Method to verify key
     ContactsHelperDB myDb;
 
-    public void setNewKey(final Contacts contact, final Context ctx) {
+    public void setNewKey(final Contacts contact, final Context ctx, String title) {
         // final ContactsHelperDB myDb = new ContactsHelperDB();
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-        builder.setTitle("Set Cloaked Key");
+        builder.setTitle(title);
 
         // I'm using fragment here so I'm using getView() to provide ViewGroup
         // but you can provide here any other instance of ViewGroup from your Fragment / Activity
@@ -52,6 +55,11 @@ public class KeyController {
                         Toast.makeText(ctx, "Key Set Success",
                                 Toast.LENGTH_LONG).show();
 
+                        //  SendMessage sm = new SendMessage();
+                        //  sm.sendSms(contact,"Notification from Cloaked please launch app :"+scrambleKey(contact));
+                        //  SendMessage.sendSms();
+
+
                     } else {
                         Toast.makeText(ctx, "Could not set key at this time",
                                 Toast.LENGTH_LONG).show();
@@ -66,6 +74,7 @@ public class KeyController {
 
                 dialog.dismiss();
 
+
             }
 
         });
@@ -79,6 +88,28 @@ public class KeyController {
 
 
     }
+
+    /*
+    * Scrambles a key within a message
+    * @returns a key set message
+    * */
+    public String scrambleKey(Contacts contact) {
+        StringBuilder scrambledKey = new StringBuilder();
+
+        String org = contact.getKey();
+        Random r = new Random();
+        // generate a random letter
+        char c = (char) (r.nextInt(26) + 'a');
+
+        for (int i = 0; i < org.length(); i++) {
+            scrambledKey.append(c);
+            scrambledKey.append(org.charAt(i));
+            c = (char) (r.nextInt(26) + 'a');
+        }
+        Log.d("SCRAM", scrambledKey.toString());
+        return scrambledKey.toString();
+    }
+
 
 }
 

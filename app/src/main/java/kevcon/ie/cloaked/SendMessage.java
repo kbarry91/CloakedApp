@@ -108,6 +108,16 @@ public class SendMessage extends AppCompatActivity {
         user_message = findViewById(R.id.edit_message);
         send_button = findViewById(R.id.button_sms_send);
 
+        // if key is not sent prompt a pop up to set key
+        if (!testContact.getKeySet()) {
+            //   KeyController.setNewKey(testContact,getBaseContext());
+            Toast.makeText(getBaseContext(), "No key Set",
+                    Toast.LENGTH_LONG).show();
+            KeyController kc = new KeyController();
+            kc.setNewKey(testContact, SendMessage.this, "No Key Set,Set Cloaked Key");
+
+        }
+
         // assign on click listener to button
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,11 +139,12 @@ public class SendMessage extends AppCompatActivity {
                     */
                 } else {
                     //   KeyController.setNewKey(testContact,getBaseContext());
-
-                    KeyController kc = new KeyController();
-                    kc.setNewKey(testContact, SendMessage.this);
                     Toast.makeText(getBaseContext(), "No key Set",
                             Toast.LENGTH_LONG).show();
+                    KeyController kc = new KeyController();
+                    kc.setNewKey(testContact, SendMessage.this, "No Key Set,Set Cloaked Key");
+
+                    // sendSms(testContact);
                 }
             }//on click
         });

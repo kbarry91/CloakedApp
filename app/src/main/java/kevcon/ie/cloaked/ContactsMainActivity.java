@@ -134,7 +134,7 @@ public class ContactsMainActivity extends Activity {
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 int index = info.position;
 
-                Log.e("index",index+" ");
+                Log.e("index", index + " =======");
 
                 // delete the contact from the database
                 if (myDb.deleteContact(contactAdapter.getItem(index)) == -1) {

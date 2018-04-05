@@ -66,7 +66,7 @@ public class ContactsAdapter extends BaseAdapter {
 
         contactName.setText(contacts.getName());
         System.getProperty("line.separator");
-        Log.e("name", contacts.getName() + " ");
+        Log.e("CONTACTSADAPTERR", contacts.getName() + " ");
 
         return view;
 
