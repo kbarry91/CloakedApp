@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.List;
+
 /**
  * Created by c-raf on 08/03/2018.
  */
@@ -97,19 +99,39 @@ public class Data extends Activity {
                 String contactNumber = editNumber.getText().toString();
 
                 // if the entered number does not contain country code must edit the number
-                if (!contactNumber.startsWith("+")) {
-                    //test getting country code
-                    String cc = GetCountryZipCode();
-                    contactNumber = Utils.addCountryCode(cc, contactNumber);
 
-                    Log.d("COUNTRY CHECK", "DEBUG number  is : " + contactNumber);
+
+
+                List<Contacts> contactList;
+                contactList = myDb.getAllContacts();
+                int dontAdd = 0;
+
+                for (Contacts con : contactList) {
+                    Log.e("Nums",  con.getNumber()+ " : " + contactNumber);
+                    if(con.getNumber().contains(contactNumber)){
+                       Toast.makeText(getApplicationContext(), "Number already exists", Toast.LENGTH_LONG).show();
+                        Log.e("Num Exists", "Number is already in db : " + contactNumber);
+                        dontAdd = 1;
+                        break;
+                    }
                 }
 
-                // create new contact object and add to database
-                Contacts newContact = new Contacts(contactName, contactNumber);
+                if(dontAdd != 1) {
+
+                    if (!contactNumber.startsWith("+")) {
+                        //test getting country code
+                        String cc = GetCountryZipCode();
+                        contactNumber = Utils.addCountryCode(cc, contactNumber);
+
+                        Log.d("COUNTRY CHECK", "DEBUG number  is : " + contactNumber);
+                    }
 
 
-                if (myDb.insertContact(newContact)) {
+                    // create new contact object and add to database
+                    Contacts newContact = new Contacts(contactName, contactNumber);
+
+
+                    if (myDb.insertContact(newContact)) {
 
                     String initialMsg = "I would like to start a convo on cloaked";
 
@@ -118,11 +140,11 @@ public class Data extends Activity {
                     Log.d("ADD CONTACT", " contact added");
                 } else {
 
-                    Log.d("ADD CONTACT", " contact add failed");
-                    myDb.close();
-                }
+                        Log.d("ADD CONTACT", " contact add failed");
+                        myDb.close();
+                    }
 
-
+                }//Close dont add if
 
 
                 Intent intent5 = new Intent(Data.this, ContactsMainActivity.class);
