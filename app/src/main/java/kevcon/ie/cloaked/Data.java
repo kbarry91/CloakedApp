@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.List;
+
 /**
  * Created by c-raf on 08/03/2018.
  */
@@ -53,36 +55,55 @@ public class Data extends Activity {
                 String contactNumber = editNumber.getText().toString();
 
                 // if the entered number does not contain country code must edit the number
-                if (!contactNumber.startsWith("+")) {
-                    //test getting country code
-                    String cc = GetCountryZipCode();
-                    contactNumber = Utils.addCountryCode(cc, contactNumber);
 
-                    Log.d("COUNTRY CHECK", "DEBUG number  is : " + contactNumber);
+
+
+                List<Contacts> contactList;
+                contactList = myDb.getAllContacts();
+                int dontAdd = 0;
+
+                for (Contacts con : contactList) {
+                    Log.e("Nums",  con.getNumber()+ " : " + contactNumber);
+                    if(con.getNumber().contains(contactNumber)){
+                       Toast.makeText(getApplicationContext(), "Number already exists", Toast.LENGTH_LONG).show();
+                        Log.e("Num Exists", "Number is already in db : " + contactNumber);
+                        dontAdd = 1;
+                        break;
+                    }
                 }
 
-                // create new contact object and add to database
-                Contacts newContact = new Contacts(contactName, contactNumber);
+                if(dontAdd != 1) {
+
+                    if (!contactNumber.startsWith("+")) {
+                        //test getting country code
+                        String cc = GetCountryZipCode();
+                        contactNumber = Utils.addCountryCode(cc, contactNumber);
+
+                        Log.d("COUNTRY CHECK", "DEBUG number  is : " + contactNumber);
+                    }
 
 
-                if (myDb.insertContact(newContact)) {
+                    // create new contact object and add to database
+                    Contacts newContact = new Contacts(contactName, contactNumber);
 
 
-
-                    String initialMsg = "I would like to start a convo on cloaked";
-
-                    sendInitialMsg(newContact, initialMsg);
-
-                    myDb.close();
-                    Log.d("ADD CONTACT", " contact added");
-
-                } else {
-
-                    Log.d("ADD CONTACT", " contact add failed");
-                    myDb.close();
-                }
+                    if (myDb.insertContact(newContact)) {
 
 
+                        String initialMsg = "I would like to start a convo on cloaked";
+
+                        sendInitialMsg(newContact, initialMsg);
+
+                        myDb.close();
+                        Log.d("ADD CONTACT", " contact added");
+
+                    } else {
+
+                        Log.d("ADD CONTACT", " contact add failed");
+                        myDb.close();
+                    }
+
+                }//Close dont add if
 
 
                 Intent intent5 = new Intent(Data.this, ContactsMainActivity.class);
@@ -131,62 +152,9 @@ public class Data extends Activity {
 
         SmsManager mySms = SmsManager.getDefault();
 
-        Context curContext = Data.this;
+        mySms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + txtMsg, null, null);
+        Toast.makeText(getApplicationContext(), "Sending request to " + testContact.getName() + " to download Cloaked",
+                Toast.LENGTH_LONG).show();
 
-        // must create intents to Check if sms is sent and delivered
-        PendingIntent sentPending = PendingIntent.getBroadcast(curContext,
-                0, new Intent("SENT"), 0);
-
-        // receiver intent to return result of  Broadcast
-        curContext.registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context arg0, Intent arg1) {
-                switch (getResultCode()) {
-                    case Activity.RESULT_OK:
-
-                        Toast.makeText(getBaseContext(), "Sending request to " + testContact.getName() + " to download Cloaked",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Toast.makeText(getBaseContext(), "SMS Not Sent: Generic failure.",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_NO_SERVICE:
-                        Toast.makeText(getBaseContext(), "SMS Not Sent: No service ",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Toast.makeText(getBaseContext(), "Not Sent: Null PDU.",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_RADIO_OFF:
-                        Toast.makeText(getBaseContext(), "Not Sent: Ensure Airplane mode is disabled",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                }
-            }
-        }, new IntentFilter("SENT"));
-
-        PendingIntent deliveredPending = PendingIntent.getBroadcast(curContext,
-                0, new Intent("DELIVERED"), 0);
-
-        curContext.registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context arg0, Intent arg1) {
-                        switch (getResultCode()) {
-                            case Activity.RESULT_OK:
-                                Toast.makeText(getBaseContext(), "Delivered.",
-                                        Toast.LENGTH_LONG).show();
-                                break;
-                            case Activity.RESULT_CANCELED:
-                                Toast.makeText(getBaseContext(), "Not Delivered: Canceled.",
-                                        Toast.LENGTH_LONG).show();
-                                break;
-                        }
-                    }
-                }, new IntentFilter("DELIVERED"));
-
-        mySms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + txtMsg, sentPending, deliveredPending);
     }
 }
