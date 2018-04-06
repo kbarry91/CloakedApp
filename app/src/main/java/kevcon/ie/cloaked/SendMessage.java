@@ -78,10 +78,18 @@ public class SendMessage extends AppCompatActivity {
         //populate message list first
         this.listMessageData = createMessageList(testContact.getNumber());
         //List<Message> listMessageData = createMessageList(testContact.getNumber());
-
-        //test list is populating
+        String newKeySet = "";
+        //test if list contains a key set request
         for (Message msg : listMessageData) {
             Log.d(READMSG, "DEBUG: " + msg.toString());
+
+            //if message contains the setkey identifier and was received
+            if (msg.toString().contains("Please Open This In Cloaked:") && msg.getType() == 1) {
+                KeyController newKeySetter = new KeyController();
+                newKeySet = newKeySetter.unScrambleKey(msg.getMessage());
+
+
+            }
         }
 
         Log.d(TAG, "onCreate: opened");
@@ -108,6 +116,7 @@ public class SendMessage extends AppCompatActivity {
         user_message = findViewById(R.id.edit_message);
         send_button = findViewById(R.id.button_sms_send);
 
+        //
         // if key is not sent prompt a pop up to set key
         if (!testContact.getKeySet()) {
             //   KeyController.setNewKey(testContact,getBaseContext());
@@ -117,7 +126,10 @@ public class SendMessage extends AppCompatActivity {
             kc.setNewKey(testContact, SendMessage.this, "No Key Set,Set Cloaked Key");
 
         }
+        if (newKeySet != null) {
 
+        }
+        Log.d("NEW KEY RECOGNISED", newKeySet);
         // assign on click listener to button
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -364,19 +376,6 @@ public class SendMessage extends AppCompatActivity {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

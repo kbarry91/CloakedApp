@@ -27,11 +27,55 @@ public class Data extends Activity {
     Button saveButton;
     ContactsHelperDB myDb;
 
+    //global Variables to send message
+    private BroadcastReceiver sendBroadcastReceiver;
+    private BroadcastReceiver deliveryBroadcastReceiver;
+    String SENT = "SMS_SENT";
+    String DELIVERED = "SMS_DELIVERED";
+
     //ContactsHelperDB myDb2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.data);
+        // set recievers when page loaded
+        sendBroadcastReceiver = new BroadcastReceiver() {
+
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode()) {
+                    case Activity.RESULT_OK:
+                        Toast.makeText(getBaseContext(), "REQUEST Sent", Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        Toast.makeText(getBaseContext(), "Generic failure", Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Toast.makeText(getBaseContext(), "No service", Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        Toast.makeText(getBaseContext(), "Null PDU", Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        Toast.makeText(getBaseContext(), "Radio off", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        };
+
+        deliveryBroadcastReceiver = new BroadcastReceiver() {
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode()) {
+                    case Activity.RESULT_OK:
+                        Toast.makeText(getBaseContext(), "REQUEST Delivered", Toast.LENGTH_SHORT).show();
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Toast.makeText(getBaseContext(), "REQUEST not delivered", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        };
+        registerReceiver(deliveryBroadcastReceiver, new IntentFilter(DELIVERED));
+        registerReceiver(sendBroadcastReceiver, new IntentFilter(SENT));
 
         //initlise database
         myDb = new ContactsHelperDB(this);
@@ -67,15 +111,11 @@ public class Data extends Activity {
 
                 if (myDb.insertContact(newContact)) {
 
-
-
                     String initialMsg = "I would like to start a convo on cloaked";
 
-                    sendInitialMsg(newContact, initialMsg);
-
+                    sendRequestSMS(newContact, initialMsg);
                     myDb.close();
                     Log.d("ADD CONTACT", " contact added");
-
                 } else {
 
                     Log.d("ADD CONTACT", " contact add failed");
@@ -125,68 +165,88 @@ public class Data extends Activity {
 
     }
 
+    public void sendRequestSMS(final Contacts testContact, String message) {
+        String SENT = "SMS_SENT";
+        String DELIVERED = "SMS_DELIVERED";
+        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
+        PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0, new Intent(DELIVERED), 0);
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + message, sentPI, deliveredPI);
+    }
 
-    //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
-    public void sendInitialMsg(final Contacts testContact, String txtMsg) {
+    /*
+        //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
+        public void sendInitialMsg(final Contacts testContact, String txtMsg) {
 
-        SmsManager mySms = SmsManager.getDefault();
+            SmsManager mySms = SmsManager.getDefault();
 
-        Context curContext = Data.this;
+            Context curContext = Data.this;
 
-        // must create intents to Check if sms is sent and delivered
-        PendingIntent sentPending = PendingIntent.getBroadcast(curContext,
-                0, new Intent("SENT"), 0);
+            // must create intents to Check if sms is sent and delivered
+            PendingIntent sentPending = PendingIntent.getBroadcast(curContext,
+                    0, new Intent("SENT"), 0);
 
-        // receiver intent to return result of  Broadcast
-        curContext.registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context arg0, Intent arg1) {
-                switch (getResultCode()) {
-                    case Activity.RESULT_OK:
+            // receiver intent to return result of  Broadcast
+            curContext.registerReceiver(new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode()) {
+                        case Activity.RESULT_OK:
 
-                        Toast.makeText(getBaseContext(), "Sending request to " + testContact.getName() + " to download Cloaked",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Toast.makeText(getBaseContext(), "SMS Not Sent: Generic failure.",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_NO_SERVICE:
-                        Toast.makeText(getBaseContext(), "SMS Not Sent: No service ",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Toast.makeText(getBaseContext(), "Not Sent: Null PDU.",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_RADIO_OFF:
-                        Toast.makeText(getBaseContext(), "Not Sent: Ensure Airplane mode is disabled",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                }
-            }
-        }, new IntentFilter("SENT"));
-
-        PendingIntent deliveredPending = PendingIntent.getBroadcast(curContext,
-                0, new Intent("DELIVERED"), 0);
-
-        curContext.registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context arg0, Intent arg1) {
-                        switch (getResultCode()) {
-                            case Activity.RESULT_OK:
-                                Toast.makeText(getBaseContext(), "Delivered.",
-                                        Toast.LENGTH_LONG).show();
-                                break;
-                            case Activity.RESULT_CANCELED:
-                                Toast.makeText(getBaseContext(), "Not Delivered: Canceled.",
-                                        Toast.LENGTH_LONG).show();
-                                break;
-                        }
+                            Toast.makeText(getBaseContext(), "Sending request to " + testContact.getName() + " to download Cloaked",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                            Toast.makeText(getBaseContext(), "request Not Sent: Generic failure.",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case SmsManager.RESULT_ERROR_NO_SERVICE:
+                            Toast.makeText(getBaseContext(), "SMS Not Sent: No service ",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case SmsManager.RESULT_ERROR_NULL_PDU:
+                            Toast.makeText(getBaseContext(), "Not Sent: Null PDU.",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        case SmsManager.RESULT_ERROR_RADIO_OFF:
+                            Toast.makeText(getBaseContext(), "Not Sent: Ensure Airplane mode is disabled",
+                                    Toast.LENGTH_LONG).show();
+                            break;
                     }
-                }, new IntentFilter("DELIVERED"));
+                }
+            }, new IntentFilter("SENT"));
 
-        mySms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + txtMsg, sentPending, deliveredPending);
+            PendingIntent deliveredPending = PendingIntent.getBroadcast(curContext,
+                    0, new Intent("DELIVERED"), 0);
+
+            curContext.registerReceiver(
+                    new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context arg0, Intent arg1) {
+                            switch (getResultCode()) {
+                                case Activity.RESULT_OK:
+                                    Toast.makeText(getBaseContext(), "Delivered.",
+                                            Toast.LENGTH_LONG).show();
+                                    break;
+                                case Activity.RESULT_CANCELED:
+                                    Toast.makeText(getBaseContext(), "Not Delivered: Canceled.",
+                                            Toast.LENGTH_LONG).show();
+                                    break;
+                            }
+                        }
+                    }, new IntentFilter("DELIVERED"));
+
+            mySms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + txtMsg, sentPending, deliveredPending);
+
+            unregisterReceiver(deliveredPending);
+
+
+        }
+        */
+    @Override
+    protected void onStop() {
+        unregisterReceiver(sendBroadcastReceiver);
+        unregisterReceiver(deliveryBroadcastReceiver);
+        super.onStop();
     }
 }

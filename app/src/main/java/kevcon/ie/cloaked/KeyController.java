@@ -71,7 +71,7 @@ public class KeyController extends Activity {
                     Toast.makeText(ctx, "Key must be 4 or more characters!",
                             Toast.LENGTH_LONG).show();
                 }
-                Log.d("ENTERED KEYY in dialog", keyEntered);
+                Log.d("ENTERED KEY in dialog", keyEntered);
 
                 dialog.dismiss();
 
@@ -109,6 +109,18 @@ public class KeyController extends Activity {
         }
         Log.d("SCRAM", scrambledKey.toString());
         return scrambledKey.toString();
+    }
+
+    /*
+   * deScrambles a key from a message
+   * @returns a new key
+   * */
+    public String unScrambleKey(String newKeySet) {
+        StringBuilder deScrambledKey = new StringBuilder();
+        for (int i = "Please Open This In Cloaked:".length() - 1; i < newKeySet.length(); i += 2) {
+            deScrambledKey.append(newKeySet.charAt(i));
+        }
+        return deScrambledKey.toString();
     }
 
 
