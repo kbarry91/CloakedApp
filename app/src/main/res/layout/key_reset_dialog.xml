@@ -1,20 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <!--android:padding="@dimen/content_padding_normal">-->
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <android.support.design.widget.TextInputLayout
+
+    <TextView
+        android:id="@+id/key_request_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textAlignment="center"
 
-        <AutoCompleteTextView
-            android:id="@+id/input"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/LinearLayout02"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/deny_reset_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/refuse_key"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorDarkGrey"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            style="?android:attr/buttonBarButtonStyle"></Button>
+
+        <Button
+            android:id="@+id/confirm_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/confirm_key"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorDarkGrey"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            style="?android:attr/buttonBarButtonStyle"></Button>
+    </LinearLayout>
+
+    <!--
+        <Button
+            android:id="@+id/confirm_reset"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_key"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword" />
+            android:text="@string/confirm_key"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/deny_reset_button"
+            android:background="@color/colorAccent" />
 
-    </android.support.design.widget.TextInputLayout>
-</FrameLayout>
+        <Button
+            android:id="@+id/deny_reset_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/refuse_key"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toLeftOf="@+id/confirm_reset"
+            android:background="@color/colorAccent" />
+    -->
+</RelativeLayout>

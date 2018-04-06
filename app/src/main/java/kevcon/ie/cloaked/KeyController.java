@@ -2,12 +2,15 @@ package kevcon.ie.cloaked;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Random;
@@ -90,10 +93,11 @@ public class KeyController extends Activity {
 
     }
 
-    /*
-    * Scrambles a key within a message
-    * @returns a key set message
-    * */
+    /**
+     * Scrambles a key within a message
+     *
+     * @return a key set message
+     */
     public String scrambleKey(Contacts contact) {
         StringBuilder scrambledKey = new StringBuilder();
 
@@ -111,16 +115,61 @@ public class KeyController extends Activity {
         return scrambledKey.toString();
     }
 
-    /*
-   * deScrambles a key from a message
-   * @returns a new key
-   * */
+    /**
+     * deScrambles a key from a message
+     *
+     * @return a new key
+     */
     public String unScrambleKey(String newKeySet) {
         StringBuilder deScrambledKey = new StringBuilder();
         for (int i = "Please Open This In Cloaked:".length() - 1; i < newKeySet.length(); i += 2) {
             deScrambledKey.append(newKeySet.charAt(i));
         }
         return deScrambledKey.toString();
+    }
+
+
+    /**
+     * resetKeys displays a dialog of a newly requested key set
+     */
+
+    public static void resetKey(final String keyText, final Contacts contact, final Context ctx) {
+
+
+        //pop up dialog to display message
+        final Dialog resetDialog = new Dialog(ctx);
+        resetDialog.setContentView(R.layout.key_reset_dialog);
+        resetDialog.setTitle("Cloaked Key Set Request");
+
+        TextView keyTextView = resetDialog.findViewById(R.id.key_request_text);
+
+        // set the pop up text
+        keyTextView.setText(keyText);
+
+        Log.d("RESETKEYPOP", "reset key" + keyText);
+
+        Button confirm = resetDialog.findViewById(R.id.confirm_reset);
+        // Close the dialog on click
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetDialog.dismiss();
+            }
+        });
+
+        Button deny = resetDialog.findViewById(R.id.deny_reset_button);
+
+        // Close the dialog on click
+        deny.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetDialog.dismiss();
+            }
+        });
+
+        resetDialog.show();
+
+
     }
 
 
