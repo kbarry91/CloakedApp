@@ -98,26 +98,23 @@ public class Data extends Activity {
                 String contactName = editName.getText().toString();
                 String contactNumber = editNumber.getText().toString();
 
-                // if the entered number does not contain country code must edit the number
-
-
 
                 List<Contacts> contactList;
                 contactList = myDb.getAllContacts();
                 int dontAdd = 0;
 
                 for (Contacts con : contactList) {
-                    Log.e("Nums",  con.getNumber()+ " : " + contactNumber);
-                    if(con.getNumber().contains(contactNumber)){
-                       Toast.makeText(getApplicationContext(), "Number already exists", Toast.LENGTH_LONG).show();
+                    Log.e("Nums", con.getNumber() + " : " + contactNumber);
+                    if (con.getNumber().contains(contactNumber)) {
+                        Toast.makeText(getApplicationContext(), "Number already exists", Toast.LENGTH_LONG).show();
                         Log.e("Num Exists", "Number is already in db : " + contactNumber);
                         dontAdd = 1;
                         break;
                     }
                 }
 
-                if(dontAdd != 1) {
-
+                if (dontAdd != 1) {
+// if the entered number does not contain country code must edit the number
                     if (!contactNumber.startsWith("+")) {
                         //test getting country code
                         String cc = GetCountryZipCode();
@@ -133,12 +130,12 @@ public class Data extends Activity {
 
                     if (myDb.insertContact(newContact)) {
 
-                    String initialMsg = "I would like to start a convo on cloaked";
+                        String initialMsg = "I would like to start a convo on cloaked";
 
-                    sendRequestSMS(newContact, initialMsg);
-                    myDb.close();
-                    Log.d("ADD CONTACT", " contact added");
-                } else {
+                        sendRequestSMS(newContact, initialMsg);
+                        myDb.close();
+                        Log.d("ADD CONTACT", " contact added");
+                    } else {
 
                         Log.d("ADD CONTACT", " contact add failed");
                         myDb.close();

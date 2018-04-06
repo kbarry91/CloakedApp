@@ -87,7 +87,7 @@ public class SendMessage extends AppCompatActivity {
             if (msg.toString().contains("Please Open This In Cloaked:") && msg.getType() == 1) {
                 KeyController newKeySetter = new KeyController();
                 newKeySet = newKeySetter.unScrambleKey(msg.getMessage());
-                KeyController.resetKey(newKeySet, testContact, this);
+                newKeySetter.resetKey(newKeySet, testContact, this);
 
             }
         }

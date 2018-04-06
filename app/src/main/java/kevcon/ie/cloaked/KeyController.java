@@ -130,10 +130,10 @@ public class KeyController extends Activity {
 
 
     /**
-     * resetKeys displays a dialog of a newly requested key set
+     * resetKeys displays a dialog of a newly requested key set.
+     * If confirmed the new key is set
      */
-
-    public static void resetKey(final String keyText, final Contacts contact, final Context ctx) {
+    public void resetKey(final String keyText, final Contacts contact, final Context ctx) {
 
 
         //pop up dialog to display message
@@ -153,6 +153,22 @@ public class KeyController extends Activity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // set the key
+                contact.setKey(keyText);
+                contact.setKeySet(true);
+
+                myDb = new ContactsHelperDB(ctx);
+                //returns true if key success
+                if (myDb.editContact(contact)) {
+                    Toast.makeText(ctx, "Key Set Success",
+                            Toast.LENGTH_LONG).show();
+
+
+                } else {
+                    Toast.makeText(ctx, "Could not set key at this time",
+                            Toast.LENGTH_LONG).show();
+                }
+                myDb.close();
                 resetDialog.dismiss();
             }
         });
@@ -163,6 +179,8 @@ public class KeyController extends Activity {
         deny.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(ctx, "Key Request Cancelled",
+                        Toast.LENGTH_LONG).show();
                 resetDialog.dismiss();
             }
         });

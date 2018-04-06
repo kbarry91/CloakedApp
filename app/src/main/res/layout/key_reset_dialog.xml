@@ -2,7 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorLightGrey"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp">
 
 
     <TextView
@@ -51,27 +54,5 @@
             style="?android:attr/buttonBarButtonStyle"></Button>
     </LinearLayout>
 
-    <!--
-        <Button
-            android:id="@+id/confirm_reset"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/confirm_key"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/deny_reset_button"
-            android:background="@color/colorAccent" />
 
-        <Button
-            android:id="@+id/deny_reset_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/refuse_key"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_toLeftOf="@+id/confirm_reset"
-            android:background="@color/colorAccent" />
-    -->
 </RelativeLayout>
