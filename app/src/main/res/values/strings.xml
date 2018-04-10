@@ -61,6 +61,11 @@
     <string name="delMsg">Delete</string>
     <string name="moreMsg">More..</string>
 
+    <!-- Contact Menu-->
+    <string name="viewContact">View Contact</string>
+    <string name="delContact">Delete Contact</string>
+    <string name="sendMsg">Send Message</string>
+
     <!-- Country codes -->
     <string-array name="CountryCodes">
         <item>93,AF</item>
