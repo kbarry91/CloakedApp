@@ -3,6 +3,8 @@ package kevcon.ie.cloaked;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -22,17 +24,13 @@ public class ContactsMainActivity extends Activity {
     Button contactAddButton;
     ListView listContacts;
 
-    //ArrayList<Contacts> arrayListContact;
-    //List<Contacts> contactList;
+    private RecyclerView contactRec;
+    private ContactsViewAdapter contactAdapter;
 
-    ContactsAdapter contactAdapter;
+    //ContactsAdapter contactAdapter;
     Contacts contacts;
 
-    final int C_View=1,C_Delete=2,C_SendMessage=3;
-
     //database variables
-    public final static String EXTRA_MESSAGE = "MESSAGE";
-    private ListView obj;
     ContactsHelperDB myDb;
     List<Contacts> contactList;
     @Override
@@ -46,7 +44,7 @@ public class ContactsMainActivity extends Activity {
         myDb.close();
 
 
-        contactAddButton = findViewById(R.id.contactAddButton);
+        contactAddButton = findViewById(R.id.button_add_contact);
 
 
         // DEBUG TO CHECK DATABASE
@@ -70,21 +68,20 @@ public class ContactsMainActivity extends Activity {
 
        // arrayListContact=new ArrayList<Contacts>();
 
-        listContacts = findViewById(R.id.listView);
+        //listContacts = findViewById(R.id.listView);
 
 
-        contactAdapter=new ContactsAdapter(ContactsMainActivity.this,contactList);
+       //contactAdapter=new ContactsAdapter(ContactsMainActivity.this,contactList);
 
-        listContacts.setAdapter(contactAdapter);
+        //listContacts.setAdapter(contactAdapter);
 
-        listContacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                registerForContextMenu(listContacts);
+        contactAdapter = new ContactsViewAdapter(this, contactList);
 
-            }
-        });
+        contactRec = findViewById(R.id.recycler_view_contact_list);
+        contactAdapter = new ContactsViewAdapter(this, contactList);
+        contactRec.setLayoutManager(new LinearLayoutManager(this));
+        contactRec.setAdapter(contactAdapter);
 
 
         //add button listener
@@ -101,102 +98,9 @@ public class ContactsMainActivity extends Activity {
 
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        if (v.getId() == R.id.listView) {
-            menu.add(0, C_View, 1, "View");
-            menu.add(0, C_Delete, 2, "Delete");
-            menu.add(0, C_SendMessage, 3, "Send Message");
-
-        }
-
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-
-
-        switch (item.getItemId())
-        {
-            case C_View:
-
-                Intent intent6=new Intent(ContactsMainActivity.this,ContactDetails.class);
-                AdapterView.AdapterContextMenuInfo info1 = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                int index1 = info1.position;
-
-                intent6.putExtra("details", contactList.get(index1));
-
-                startActivity(intent6);
-
-                break;
-
-            case C_Delete:
-
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                int index = info.position;
-
-                Log.e("index", index + " =======");
-
-                // delete the contact from the database
-                if (myDb.deleteContact(contactAdapter.getItem(index)) == -1) {
-                    Toast.makeText(this, " Failed to delete", Toast.LENGTH_SHORT).show();
-
-                } else {
-
-                    contactList.remove(index);
-
-                    contactAdapter.notifyDataSetChanged();
-                    Toast.makeText(this, "Contact deleted", Toast.LENGTH_SHORT).show();
-                }
 
 
 
-
-
-                break;
-
-            case C_SendMessage:
-                                        //Change ContactDetails to a SendSms.java
-                                        //or something, this will pass the contents into the selected
-                                        //index into a class. Ask Kevin which class suits.
-
-                Intent intent7=new Intent(ContactsMainActivity.this,SendMessage.class);
-                AdapterView.AdapterContextMenuInfo info2 = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                int index2 = info2.position;
-
-                intent7.putExtra("send_msg", contactAdapter.getItem(index2));
-
-                startActivity(intent7);
-
-                break;
-
-        }
-        return  true;
-
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (resultCode==2) {
-
-            contacts = (Contacts) data.getSerializableExtra("data");
-
-
-            contactList.add(contacts);
-            contactAdapter.notifyDataSetChanged();
-
-
-
-        }
-
-
-    }
 
 
 }
