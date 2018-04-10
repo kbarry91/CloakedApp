@@ -159,7 +159,6 @@ public class SendMessage extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                     }
                     Log.d("After verifyInvalid key", "!!!!!!!!!!!!!!!!!");
-
                     Log.d("OUTSDIDE KEY CEHCK", "outside");
                     */
                 } else {
@@ -296,9 +295,7 @@ public class SendMessage extends AppCompatActivity {
         String testMessage = "Sent From Cloaked:" + user_message.getText().toString();
         /*
         StringBuilder cloakedMessage = new StringBuilder();
-
         //to send a message first an encryption key must be established
-
         int pos = 0;
         int sentLength = testMessage.length();
         while (pos < sentLength) {// while end of sentence not reached
