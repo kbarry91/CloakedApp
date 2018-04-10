@@ -79,17 +79,19 @@ public class Data extends Activity {
         registerReceiver(deliveryBroadcastReceiver, new IntentFilter(DELIVERED));
         registerReceiver(sendBroadcastReceiver, new IntentFilter(SENT));
 
+
         //initlise database
         myDb = new ContactsHelperDB(this);
         // myDb2 = new ContactsHelperDB(this);
         //  myDb2.close();
         // Log.d("IN PAAAAAGE", "MYDBJUST CLOSED------------- ");
+
+        // bind elements to variables
         editName = findViewById(R.id.editName);
         editNumber = findViewById(R.id.editNumber);
-
         saveButton = findViewById(R.id.save);
 
-
+        // set listenerr fopr add contact button
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,35 +99,42 @@ public class Data extends Activity {
                 // get values from user
                 String contactName = editName.getText().toString();
                 String contactNumber = editNumber.getText().toString();
+                String cc = GetCountryZipCode();
+                String contactCheck = Utils.addCountryCode(cc, contactNumber);
 
+                List<Contacts> contactList = myDb.getAllContacts();
 
-                List<Contacts> contactList;
-                contactList = myDb.getAllContacts();
-                int dontAdd = 0;
+                boolean canAdd = true;
+
+                for (Contacts con : contactList) {
+                    Log.e("DEBUG CONTACT LIST", con.getNumber());
+                }
 
                 for (Contacts con : contactList) {
                     Log.e("Nums", con.getNumber() + " : " + contactNumber);
-                    if (con.getNumber().contains(contactNumber)) {
+                    if (con.getNumber().contains(contactCheck)) {
                         Toast.makeText(getApplicationContext(), "Number already exists", Toast.LENGTH_LONG).show();
                         Log.e("Num Exists", "Number is already in db : " + contactNumber);
-                        dontAdd = 1;
+                        canAdd = false;
                         break;
                     }
                 }
 
-                if (dontAdd != 1) {
-// if the entered number does not contain country code must edit the number
+                // if number not in database
+                if (canAdd) {
+                    String editedNumber = "";
+                    // if the entered number does not contain country code must edit the number
                     if (!contactNumber.startsWith("+")) {
                         //test getting country code
-                        String cc = GetCountryZipCode();
-                        contactNumber = Utils.addCountryCode(cc, contactNumber);
+                        //  cc = GetCountryZipCode();
+                        editedNumber = Utils.addCountryCode(cc, contactNumber);
 
-                        Log.d("COUNTRY CHECK", "DEBUG number  is : " + contactNumber);
+                        Log.d("COUNTRY CHECK", "DEBUG number  is : " + editedNumber + " cc:" + cc);
                     }
 
 
                     // create new contact object and add to database
-                    Contacts newContact = new Contacts(contactName, contactNumber);
+                    Contacts newContact = new Contacts(contactName, editedNumber);
 
 
                     if (myDb.insertContact(newContact)) {

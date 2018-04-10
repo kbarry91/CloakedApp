@@ -39,8 +39,8 @@ public class Utils {
      */
     public static String addCountryCode(String countryCode, String number) {
 
-        number.replaceFirst("0", "+" + countryCode);
-        return number;
+        String newNumber = number.replaceFirst("0", "+" + countryCode);
+        return newNumber;
     }
 
     //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
@@ -131,8 +131,31 @@ public class Utils {
 
     }
 
+    /*
+       * Method to get country code for a number will be moved to add contact*/
+    /*
+    public static String GetCountryZipCode(Context ctx) {
 
+        String CountryID;
+        String CountryZipCode = "";
 
+        TelephonyManager manager = (TelephonyManager) this.getApplicationContext(Context.TELEPHONY_SERVICE);
+        //getNetworkCountryIso
+        CountryID = manager.getSimCountryIso().toUpperCase();
+        String[] rl = this.getResources().getStringArray(R.array.CountryCodes);
 
+        //optimised for loop
+        for (int i = 0, rlLength = rl.length; i < rlLength; i++) {
+            String aRl = rl[i];
+            String[] g = aRl.split(",");
+            if (g[1].trim().equals(CountryID.trim())) {
+                CountryZipCode = g[0];
+                break;
+            }
+        }
+        return CountryZipCode;
+    }
+
+*/
 
 }

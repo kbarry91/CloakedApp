@@ -26,7 +26,7 @@ public class Contacts implements Serializable{
         this.mName = name;
         this.mNumber = number;
         this.isKeySet = false;
-        this.key = "key";
+        this.key = null;
     }
     public String getName() {
 

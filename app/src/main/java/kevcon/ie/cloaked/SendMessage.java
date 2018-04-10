@@ -79,6 +79,7 @@ public class SendMessage extends AppCompatActivity {
         this.listMessageData = createMessageList(testContact.getNumber());
         //List<Message> listMessageData = createMessageList(testContact.getNumber());
         String newKeySet = "";
+
         //test if list contains a key set request
         for (Message msg : listMessageData) {
             Log.d(READMSG, "DEBUG: " + msg.toString());
@@ -86,8 +87,20 @@ public class SendMessage extends AppCompatActivity {
             //if message contains the setkey identifier and was received
             if (msg.toString().contains("Please Open This In Cloaked:") && msg.getType() == 1) {
                 KeyController newKeySetter = new KeyController();
+//&& msg.getType() == 1
+                //   String test = Utils.GetCountryZipCode(this);
+                // decipher the key from the message
                 newKeySet = newKeySetter.unScrambleKey(msg.getMessage());
+
+                // reset the key for this contact
                 newKeySetter.resetKey(newKeySet, testContact, this);
+
+                // remove the key message form the device
+                newKeySetter.deleteKeyRequest(msg, this);
+
+                // remove the message from message list
+                listMessageData.remove(msg);
+
 
             }
         }
@@ -174,6 +187,8 @@ public class SendMessage extends AppCompatActivity {
         String dateTime = "";
         String type = "";
 
+        // DEBUG
+        String msgInfo = "";
         //get read access to message data
         Cursor cur = getContentResolver().query(Uri.parse("content://sms/"), null, numberString, null, null);
 
@@ -182,7 +197,7 @@ public class SendMessage extends AppCompatActivity {
             do {
 
                 for (int i = 0; i < cur.getColumnCount(); i++) {
-                    //   msgInfo += " " + cur.getColumnName(i) + ":" + cur.getString(i); /// KEEP THIS LINE FOR DEBUG
+                    msgInfo += " " + cur.getColumnName(i) + ":" + cur.getString(i); /// KEEP THIS LINE FOR DEBUG
                     number = cur.getString(cur.getColumnIndexOrThrow("address"));
                     body = cur.getString(cur.getColumnIndexOrThrow("body"));
                     dateTime = cur.getString(cur.getColumnIndexOrThrow("date"));
@@ -195,6 +210,7 @@ public class SendMessage extends AppCompatActivity {
                 } else if (type.equals("1")) {
                     messageType = 1;
                 }
+                Log.d("MSG FROM PHONE", msgInfo);
                 //create a message object
                 message = new Message(body, number, dateTime, messageType);
 
@@ -202,7 +218,7 @@ public class SendMessage extends AppCompatActivity {
                 messageList.add(message);
 
                 //DEBUG
-                //Log.d(READMSG, "DEBUG: " + message.toString());
+                Log.d(READMSG, "DEBUG: " + message.toString());
 
             } while (cur.moveToNext());
         } else {

@@ -3,8 +3,11 @@ package kevcon.ie.cloaked;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,6 +163,7 @@ public class KeyController extends Activity {
                 myDb = new ContactsHelperDB(ctx);
                 //returns true if key success
                 if (myDb.editContact(contact)) {
+
                     Toast.makeText(ctx, "Key Set Success",
                             Toast.LENGTH_LONG).show();
 
@@ -190,6 +194,54 @@ public class KeyController extends Activity {
 
     }
 
+    /**
+     * deleteKeyRequest Deletes the key request from the devices sms history so that it does not request key again
+     */
+    public void deleteKeyRequest(Message message, Context ctx) {
+        Log.d("DELETEREQ", message.toString());
+        //   String cc = Data.GetCountryZipCode();
+        // contactNumber = Utils.addCountryCode(cc, contactNumber);
+        try {
+            Uri uriSms = Uri.parse("content://sms/inbox");
+            Cursor c = ctx.getContentResolver().query(
+                    uriSms,
+                    new String[]{"_id", "thread_id", "address", "person",
+                            "date", "body"}, "read=0", null, null);
+
+            if (c != null && c.moveToFirst()) {
+                do {
+                    long id = c.getLong(0);
+                    long threadId = c.getLong(1);
+                    String address = c.getString(2);
+                    String body = c.getString(5);
+                    String date = c.getString(3);
+                    Log.e("log>>>",
+                            "0--->" + c.getString(0) + "1---->" + c.getString(1)
+                                    + "2---->" + c.getString(2) + "3--->"
+                                    + c.getString(3) + "4----->" + c.getString(4)
+                                    + "5---->" + c.getString(5));
+                    Log.e("log>>>", "date" + c.getString(0));
+
+                    ContentValues values = new ContentValues();
+                    values.put("read", true);
+                    getContentResolver().update(Uri.parse("content://sms/"),
+                            values, "_id=" + id, null);
+
+                    if (body.equals(message.getMessage()) && address.equals(message.getSender())) {
+                        // mLogger.logInfo("Deleting SMS with id: " + threadId);
+                        ctx.getContentResolver().delete(
+                                Uri.parse("content://sms/" + id), "date=?",
+                                new String[]{c.getString(4)});
+                        Log.e("log>>>", "Delete success.........");
+                    }
+                } while (c.moveToNext());
+            }
+            // close cursor
+            c.close();
+        } catch (Exception e) {
+            Log.e("log>>>", e.toString());
+        }
+    }
 
 }
 

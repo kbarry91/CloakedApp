@@ -40,18 +40,21 @@ public class ContactsMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contacts_activity_main);
 
-        //test contact
-
         // inilise database
         myDb = new ContactsHelperDB(this);
         contactList = myDb.getAllContacts();
         myDb.close();
+
+
         contactAddButton = findViewById(R.id.contactAddButton);
+
 
         // DEBUG TO CHECK DATABASE
         for (Contacts con : contactList) {
-            Log.d("DATACHECK", con.toString());
+            Log.e("DATACHECK", con.toString());
         }
+
+
         //add button listener
         contactAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
