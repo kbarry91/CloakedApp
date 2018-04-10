@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
 
     <application
         android:allowBackup="true"
@@ -77,10 +78,6 @@
             android:label="ContactList"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-            android:name=".MessageListActivity"
-            android:label="MessageList"
-            android:theme="@style/AppTheme.NoActionBar"/>
 
 
     </application>

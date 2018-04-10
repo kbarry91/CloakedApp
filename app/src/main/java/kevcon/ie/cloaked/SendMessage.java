@@ -67,42 +67,28 @@ public class SendMessage extends AppCompatActivity {
         intent = getIntent();
         this.testContact = (Contacts) intent.getSerializableExtra("send_msg");
 
-        //test getting country code
-        //  String cc = GetCountryZipCode();
-        //   String testConvNumber = Utils.addCountryCode(cc,testContact.getNumber());
-
-        //  Log.d("COUNTRY CHECK", "DEBUG number  is : " +testConvNumber);
-
-
         // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
         this.listMessageData = createMessageList(testContact.getNumber());
-        //List<Message> listMessageData = createMessageList(testContact.getNumber());
+
         String newKeySet = "";
 
         //test if list contains a key set request
-        for (Message msg : listMessageData) {
-            Log.d(READMSG, "DEBUG: " + msg.toString());
+        Message lastReceived = listMessageData.get(listMessageData.size() - 1);
+        if (lastReceived.toString().contains("Please Open This In Cloaked:") && lastReceived.getType() == 1) {
+            KeyController newKeySetter = new KeyController();
 
-            //if message contains the setkey identifier and was received
-            if (msg.toString().contains("Please Open This In Cloaked:") && msg.getType() == 1) {
-                KeyController newKeySetter = new KeyController();
-//&& msg.getType() == 1
-                //   String test = Utils.GetCountryZipCode(this);
-                // decipher the key from the message
-                newKeySet = newKeySetter.unScrambleKey(msg.getMessage());
+            // decipher the key from the message
+            newKeySet = newKeySetter.unScrambleKey(lastReceived.getMessage());
 
+            if (!newKeySet.equals(testContact.getKey())) {
                 // reset the key for this contact
-                newKeySetter.resetKey(newKeySet, testContact, this);
-
-                // remove the key message form the device
-                newKeySetter.deleteKeyRequest(msg, this);
-
-                // remove the message from message list
-                listMessageData.remove(msg);
-
-
+                if (newKeySetter.resetKey(newKeySet, testContact, this)) {
+                    testContact.setKey(newKeySet);
+                    testContact.setKeySet(true);
+                }
             }
+
         }
 
         Log.d(TAG, "onCreate: opened");
@@ -121,7 +107,6 @@ public class SendMessage extends AppCompatActivity {
         messageRec.setLayoutManager(new LinearLayoutManager(this));
         messageRec.setAdapter(messageAdp);
 
-        //add a click action to messages in list
 
         //getSupportActionBar().setHomeButtonEnabled(true);
         //assign user_message and button to view
@@ -139,9 +124,7 @@ public class SendMessage extends AppCompatActivity {
             kc.setNewKey(testContact, SendMessage.this, "No Key Set,Set Cloaked Key");
 
         }
-        if (newKeySet != null) {
-            Log.d("NEW KEY RECOGNISED", newKeySet);
-        }
+      
 
         // assign on click listener to button
         send_button.setOnClickListener(new View.OnClickListener() {
@@ -150,18 +133,7 @@ public class SendMessage extends AppCompatActivity {
                 //to send a message first an encryption key must be established
                 if (testContact.getKeySet()) {
                     verifyKey();
-                    /*
-                    if (keyChecker(verifyEnteredKey)) {
-                        Log.d("Valid key", "!!!!!!!!!!!!!!!!!");
-                        sendSms(testContact);
-                    } else {
-                        Toast.makeText(getBaseContext(), "Invalid  Key",
-                                Toast.LENGTH_LONG).show();
-                    }
-                    Log.d("After verifyInvalid key", "!!!!!!!!!!!!!!!!!");
 
-                    Log.d("OUTSDIDE KEY CEHCK", "outside");
-                    */
                 } else {
                     //   KeyController.setNewKey(testContact,getBaseContext());
                     Toast.makeText(getBaseContext(), "No key Set",
@@ -169,7 +141,6 @@ public class SendMessage extends AppCompatActivity {
                     KeyController kc = new KeyController();
                     kc.setNewKey(testContact, SendMessage.this, "No Key Set,Set Cloaked Key");
 
-                    // sendSms(testContact);
                 }
             }//on click
         });
@@ -294,19 +265,7 @@ public class SendMessage extends AppCompatActivity {
     public void sendSms(Contacts testContact) {
 // a test message to try encryption
         String testMessage = "Sent From Cloaked:" + user_message.getText().toString();
-        /*
-        StringBuilder cloakedMessage = new StringBuilder();
 
-        //to send a message first an encryption key must be established
-
-        int pos = 0;
-        int sentLength = testMessage.length();
-        while (pos < sentLength) {// while end of sentence not reached
-            char letter = Encryption.encrypt(Character.toUpperCase(testMessage.charAt(pos)), testContact.getKey().toUpperCase());
-            cloakedMessage.append(letter);
-            pos++;
-        } // while
-        */
         String cloakedMessage = DecryptMessage(testMessage, testContact.getKey());
 
         Log.d(TAG, "Attempting to send sms");
