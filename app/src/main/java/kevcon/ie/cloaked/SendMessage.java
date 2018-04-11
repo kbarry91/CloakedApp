@@ -109,16 +109,45 @@ public class SendMessage extends AppCompatActivity {
 
         user_message = findViewById(R.id.edit_message);
         send_button = findViewById(R.id.button_sms_send);
-/*
-        for(int i = listMessageData.size()-1;i!=0;i--){
-            if (listMessageData.get(i).getMessage().contains("Please Open This In Cloaked:") && listMessageData.get(i).getType()==1) {
-
-            }
-        }
-    */
-
-
         String newKeySet = "";
+        Message messageCheck = null;
+        boolean found = false;
+
+        //if the list is not empty
+        if (listMessageData.size() > 0) {
+            //must be able to break out of outer loop
+            outerloop:
+            for (int i = listMessageData.size() - 1; i >= 0; i--) {
+                messageCheck = listMessageData.get(i);
+                if (messageCheck.getMessage().contains("Please Open This In Cloaked:")) {
+                    found = true;
+                    break outerloop;
+
+                }//if pattern is found
+
+            }// for
+            // decipher the key from the message
+            if (messageCheck != null && found && messageCheck.getType() == 1) {
+                KeyController newKeySetter = new KeyController();
+
+                newKeySet = newKeySetter.unScrambleKey(messageCheck.getMessage());
+                if (!newKeySet.equals(testContact.getKey())) {
+                    Log.e(BRICK, "just  key didnt match: ");
+                    // reset the key for this contact
+                    if (newKeySetter.resetKey(newKeySet, testContact, this, lookValidKey)) {
+                        Log.e(BRICK, "just setting new key  ");
+                        testContact.setKey(newKeySet);
+                        testContact.setKeySet(true);
+                    }
+                }//if key set not equal new key
+            }
+            //lookValidKey.run();
+        } else {
+            lookValidKey.run();
+        }
+
+/*
+        //  String newKeySet = "";
         //if the list is not empty
         if (listMessageData.size() > 0) {
             //test if list contains a key set request
@@ -143,6 +172,7 @@ public class SendMessage extends AppCompatActivity {
         } else {
             lookValidKey.run();
         }
+        */
         Log.e(BRICK, "phhhhheeeeew  ");
 
 
