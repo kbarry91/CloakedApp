@@ -40,6 +40,7 @@ public class SendMessage extends AppCompatActivity {
     // Tag for debugging
     private static final String TAG = "SendMessage";
     private static final String READMSG = "CREATE MESSAGE LIST:";
+    private static final String BRICK = "INBRICK>>>>>>>";
 
     // define UI Components
     private EditText user_message;
@@ -67,31 +68,26 @@ public class SendMessage extends AppCompatActivity {
         intent = getIntent();
         this.testContact = (Contacts) intent.getSerializableExtra("send_msg");
 
-        // may have to move to an adapter for dynamic binding!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //populate message list first
         this.listMessageData = createMessageList(testContact.getNumber());
 
-        String newKeySet = "";
+        Runnable lookValidKey = new Runnable() {
+            @Override
+            public void run() {
+                // if key is not sent prompt a pop up to set key
+                if (!testContact.getKeySet()) {
+                    //   KeyController.setNewKey(testContact,getBaseContext());
+                    Toast.makeText(getBaseContext(), "No key Set",
+                            Toast.LENGTH_LONG).show();
+                    KeyController kc = new KeyController();
+                    kc.setNewKey(testContact, SendMessage.this, "No Key Set,Set Cloaked Key");
 
-        //test if list contains a key set request
-        Message lastReceived = listMessageData.get(listMessageData.size() - 1);
-        if (lastReceived.toString().contains("Please Open This In Cloaked:") && lastReceived.getType() == 1) {
-            KeyController newKeySetter = new KeyController();
-
-            // decipher the key from the message
-            newKeySet = newKeySetter.unScrambleKey(lastReceived.getMessage());
-
-            if (!newKeySet.equals(testContact.getKey())) {
-                // reset the key for this contact
-                if (newKeySetter.resetKey(newKeySet, testContact, this)) {
-                    testContact.setKey(newKeySet);
-                    testContact.setKeySet(true);
                 }
             }
+        };
 
-        }
 
-        Log.d(TAG, "onCreate: opened");
+        // Log.d(TAG, "onCreate: opened");
         setContentView(R.layout.activity_send_message);
 
         // set up a toolbar with contacts name and back button to parent activity
@@ -113,18 +109,42 @@ public class SendMessage extends AppCompatActivity {
 
         user_message = findViewById(R.id.edit_message);
         send_button = findViewById(R.id.button_sms_send);
+/*
+        for(int i = listMessageData.size()-1;i!=0;i--){
+            if (listMessageData.get(i).getMessage().contains("Please Open This In Cloaked:") && listMessageData.get(i).getType()==1) {
 
-        //
-        // if key is not sent prompt a pop up to set key
-        if (!testContact.getKeySet()) {
-            //   KeyController.setNewKey(testContact,getBaseContext());
-            Toast.makeText(getBaseContext(), "No key Set",
-                    Toast.LENGTH_LONG).show();
-            KeyController kc = new KeyController();
-            kc.setNewKey(testContact, SendMessage.this, "No Key Set,Set Cloaked Key");
-
+            }
         }
-      
+    */
+
+
+        String newKeySet = "";
+        //if the list is not empty
+        if (listMessageData.size() > 0) {
+            //test if list contains a key set request
+            Message lastReceived = listMessageData.get(listMessageData.size() - 1);
+            if (lastReceived.toString().contains("Please Open This In Cloaked:") && lastReceived.getType() == 1) {
+                KeyController newKeySetter = new KeyController();
+                // decipher the key from the message
+                newKeySet = newKeySetter.unScrambleKey(lastReceived.getMessage());
+                if (!newKeySet.equals(testContact.getKey())) {
+                    Log.e(BRICK, "just  key didnt match: ");
+                    // reset the key for this contact
+                    if (newKeySetter.resetKey(newKeySet, testContact, this, lookValidKey)) {
+                        Log.e(BRICK, "just setting new key  ");
+                        testContact.setKey(newKeySet);
+                        testContact.setKeySet(true);
+                    }
+                }
+
+            } else {
+                lookValidKey.run();
+            }
+        } else {
+            lookValidKey.run();
+        }
+        Log.e(BRICK, "phhhhheeeeew  ");
+
 
         // assign on click listener to button
         send_button.setOnClickListener(new View.OnClickListener() {

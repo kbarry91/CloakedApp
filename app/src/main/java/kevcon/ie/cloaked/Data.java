@@ -139,7 +139,7 @@ public class Data extends Activity {
 
                     if (myDb.insertContact(newContact)) {
 
-                        String initialMsg = "I would like to start a convo on cloaked";
+                        String initialMsg = "I would encrypt our messages, Please download Cloaked and add me as a contact!";
 
                         sendRequestSMS(newContact, initialMsg);
                         myDb.close();

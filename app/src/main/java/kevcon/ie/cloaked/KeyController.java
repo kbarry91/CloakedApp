@@ -23,15 +23,15 @@ public class KeyController extends Activity {
     // Method to verify key
     ContactsHelperDB myDb;
     boolean keyWasSet;
+    String BRICK = "INBRICK.2.0>>>>>>>";
+
 
     public void setNewKey(final Contacts contact, final Context ctx, String title) {
         // final ContactsHelperDB myDb = new ContactsHelperDB();
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setTitle(title);
 
-        // I'm using fragment here so I'm using getView() to provide ViewGroup
-        // but you can provide here any other instance of ViewGroup from your Fragment / Activity
-        //  View viewInflated = LayoutInflater.from(ctx).inflate(R.layout.key_entry_dialog, (ViewGroup) findViewById(android.R.id.content), false);
+
         // Set up the input
         View viewInflated = LayoutInflater.from(ctx).inflate(R.layout.key_set_dialog, null, false);
 
@@ -60,9 +60,7 @@ public class KeyController extends Activity {
                                 Toast.LENGTH_LONG).show();
 
                         Utils.sendMessage(contact, scrambleKey(contact), ctx);
-                        //  SendMessage sm = new SendMessage();
-                        //  sm.sendSms(contact,"Notification from Cloaked please launch app :"+scrambleKey(contact));
-                        //  SendMessage.sendSms();
+
 
 
                     } else {
@@ -123,7 +121,7 @@ public class KeyController extends Activity {
      */
     public String unScrambleKey(String newKeySet) {
         StringBuilder deScrambledKey = new StringBuilder();
-        for (int i = "Please Open This In Cloaked:".length() - 1; i < newKeySet.length(); i += 2) {
+        for (int i = "Please Open This In Cloaked:".length() + 1; i < newKeySet.length(); i += 2) {
             deScrambledKey.append(newKeySet.charAt(i));
         }
         return deScrambledKey.toString();
@@ -133,10 +131,14 @@ public class KeyController extends Activity {
     /**
      * resetKeys displays a dialog of a newly requested key set.
      * If confirmed the new key is set
+     * Must be synchroised to stop program advancing before user makes a choice
      */
-    public boolean resetKey(final String keyText, final Contacts contact, final Context ctx) {
+    public boolean resetKey(final String keyText, final Contacts contact, final Context ctx, final Runnable lookValidKey) {
+        Log.e(BRICK, "just entered reset key");
+        // Run this function on a ui thread
 
 
+        Log.d(BRICK, "just RUNNNING");
         keyWasSet = false;
         //pop up dialog to display message
         final Dialog resetDialog = new Dialog(ctx);
@@ -165,12 +167,19 @@ public class KeyController extends Activity {
                 if (myDb.editContact(contact)) {
                     Toast.makeText(ctx, "Key Set Success",
                             Toast.LENGTH_LONG).show();
-//deleteKeyRequest(message,ctx);
+
                     keyWasSet = true;
+                    //notify that thread has finished
+                    lookValidKey.run();
+
                 } else {
                     Toast.makeText(ctx, "Could not set key at this time",
                             Toast.LENGTH_LONG).show();
                     keyWasSet = false;
+                    //notify that thread has finished
+
+                    lookValidKey.run();
+
                 }
                 myDb.close();
                 resetDialog.dismiss();
@@ -187,14 +196,15 @@ public class KeyController extends Activity {
                 Toast.makeText(ctx, "Key Request Cancelled",
                         Toast.LENGTH_LONG).show();
                 resetDialog.dismiss();
+                lookValidKey.run();
             }
         });
 
         resetDialog.show();
 
+
         return keyWasSet;
     }
-
 
 
 }
