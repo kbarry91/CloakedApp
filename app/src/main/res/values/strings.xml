@@ -66,6 +66,7 @@
     <string name="delContact">Delete Contact</string>
     <string name="sendMsg">Send Message</string>
 
+    <string name="resetCloakKey">Reset Cloaked Key</string>
     <!-- Country codes -->
     <string-array name="CountryCodes">
         <item>93,AF</item>

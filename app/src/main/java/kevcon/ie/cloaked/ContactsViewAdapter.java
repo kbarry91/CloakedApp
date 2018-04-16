@@ -4,18 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
-
-import static kevcon.ie.cloaked.Encryption.startDecrypt;
 
 /**
  * <h1>ContactsViewAdapter</h1>
@@ -222,9 +218,13 @@ public class ContactsViewAdapter extends RecyclerView.Adapter {
 
                                     break;
                                 case R.id.option3:
-                                    Intent intent2=new Intent(ctx,SendMessage.class);
+                                    Intent intent2 = new Intent(ctx, SendMessage.class);
                                     intent2.putExtra("send_msg", contact);
                                     ctx.startActivity(intent2);
+                                    break;
+                                case R.id.option4:
+                                    KeyController kc = new KeyController();
+                                    kc.setNewKey(contact, ctx, "Reset Cloaked Key");
                                     break;
                             }
                             return false;
