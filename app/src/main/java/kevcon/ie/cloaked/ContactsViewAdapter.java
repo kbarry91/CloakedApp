@@ -2,6 +2,8 @@ package kevcon.ie.cloaked;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,11 +25,11 @@ import java.util.List;
 public class ContactsViewAdapter extends RecyclerView.Adapter {
 
 
-
+    private static final int READ_SMS_PERMISSIONS_REQUEST = 1;
 
     private Context ctx;
     private List<Contacts> listContacts;
-
+    private ContactsMainActivity cma;
 
 
 
@@ -143,11 +145,16 @@ public class ContactsViewAdapter extends RecyclerView.Adapter {
                                     break;
                                 case R.id.option3:
 
-                                    Intent intent2=new Intent(ctx,SendMessage.class);
+                                    Intent intent2 = new Intent(ctx, SendMessage.class);
                                     intent2.putExtra("send_msg", contact);
                                     ctx.startActivity(intent2);
 
+
                                     break;
+                                //   Intent intent2 = new Intent(ctx, SendMessage.class);
+                                //     intent2.putExtra("send_msg", contact);
+                                //   ctx.startActivity(intent2);
+                                //   break;
                             }
                             return false;
                         }
@@ -218,10 +225,24 @@ public class ContactsViewAdapter extends RecyclerView.Adapter {
 
                                     break;
                                 case R.id.option3:
-                                    Intent intent2 = new Intent(ctx, SendMessage.class);
-                                    intent2.putExtra("send_msg", contact);
-                                    ctx.startActivity(intent2);
+                                    ContactsMainActivity cma = new ContactsMainActivity();
+
+                                    if (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.READ_SMS)
+                                            != PackageManager.PERMISSION_GRANTED) {
+                                        cma.getPermissionToReadSMS();
+
+
+                                    } else {
+                                        Intent intent2 = new Intent(ctx, SendMessage.class);
+                                        intent2.putExtra("send_msg", contact);
+                                        ctx.startActivity(intent2);
+
+                                    }
                                     break;
+                                //   Intent intent2 = new Intent(ctx, SendMessage.class);
+                                //     intent2.putExtra("send_msg", contact);
+                                //   ctx.startActivity(intent2);
+                                //   break;
                                 case R.id.option4:
                                     KeyController kc = new KeyController();
                                     kc.setNewKey(contact, ctx, "Reset Cloaked Key");
@@ -237,4 +258,6 @@ public class ContactsViewAdapter extends RecyclerView.Adapter {
 
         }
     }
+
+
 }

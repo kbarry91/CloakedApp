@@ -66,6 +66,13 @@
     <string name="delContact">Delete Contact</string>
     <string name="sendMsg">Send Message</string>
 
+    <!-- SMS PERMISSIONS-->
+    <string name="sms_access_required">SMS access is required to send sms</string>
+    <string name="ok">OK</string>
+    <string name="sms_unavailable"><b>SMS UNAVAILABLE</b>could not be used</string>
+    <string name="sms_permission_granted">Sms permission was granted</string>
+    <string name="sms_permission_denied">Sms permission request was denied.</string>
+
     <string name="resetCloakKey">Reset Cloaked Key</string>
     <!-- Country codes -->
     <string-array name="CountryCodes">

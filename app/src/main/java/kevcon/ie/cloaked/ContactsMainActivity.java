@@ -1,24 +1,25 @@
 package kevcon.ie.cloaked;
 
-import android.app.ActionBar;
-import android.app.Activity;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class ContactsMainActivity extends AppCompatActivity {
 
     private RecyclerView contactRec;
     private ContactsViewAdapter contactAdapter;
-
+    private static final int READ_SMS_PERMISSIONS_REQUEST = 1;
     //ContactsAdapter contactAdapter;
     Contacts contacts;
 
@@ -154,10 +155,14 @@ public class ContactsMainActivity extends AppCompatActivity {
         contactAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(ContactsMainActivity.this, android.Manifest.permission.READ_SMS)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    getPermissionToReadSMS();
+                } else {
 
-                Intent intent = new Intent(ContactsMainActivity.this, Data.class);
-                startActivityForResult(intent, 1);
-
+                    Intent intent = new Intent(ContactsMainActivity.this, Data.class);
+                    startActivityForResult(intent, 1);
+                }
 
             }
         });
@@ -175,8 +180,38 @@ public class ContactsMainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    public void getPermissionToReadSMS() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (shouldShowRequestPermissionRationale(
+                    android.Manifest.permission.READ_SMS)) {
+                Toast.makeText(this, "Please allow permission!", Toast.LENGTH_SHORT).show();
+            }
+            requestPermissions(new String[]{android.Manifest.permission.READ_SMS},
+                    READ_SMS_PERMISSIONS_REQUEST);
+        }
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        // Make sure it's our original READ_CONTACTS request
+        if (requestCode == READ_SMS_PERMISSIONS_REQUEST) {
+            if (grantResults.length == 1 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Read SMS permission granted", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ContactsMainActivity.this, Data.class);
+                startActivityForResult(intent, 1);
+            } else {
+                Toast.makeText(this, "Read SMS permission denied", Toast.LENGTH_SHORT).show();
+            }
 
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 
 }
 

@@ -165,7 +165,6 @@ public class SendMessage extends AppCompatActivity {
                         testContact.setKeySet(true);
                     }
                 }
-
             } else {
                 lookValidKey.run();
             }
