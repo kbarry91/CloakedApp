@@ -111,7 +111,9 @@ public class KeyController extends Activity {
             c = (char) (r.nextInt(26) + 'a');
         }
         Log.d("SCRAM", scrambledKey.toString());
-        return scrambledKey.toString();
+        // convert the scrambled key to hex
+        String hexKey =  Utils.keyStringToHex(scrambledKey.toString().getBytes());
+        return hexKey;
     }
 
     /**
@@ -121,9 +123,14 @@ public class KeyController extends Activity {
      */
     public String unScrambleKey(String newKeySet) {
         StringBuilder deScrambledKey = new StringBuilder();
-        for (int i = "Please Open This In Cloaked:".length() + 1; i < newKeySet.length(); i += 2) {
-            deScrambledKey.append(newKeySet.charAt(i));
+       // final int prefixLength = "Please Open This In Cloaked:".length();
+       final String hexStr = newKeySet.substring(newKeySet.lastIndexOf(":")+1);
+      final  String keyStr = Utils.hexKeyToString(hexStr);
+        Log.d("SCRAMBLE KEY: hex:", hexStr+" str:"+keyStr);
+        for (int i = 1; i < keyStr.length(); i += 2) {
+            deScrambledKey.append(keyStr.charAt(i));
         }
+
         return deScrambledKey.toString();
     }
 

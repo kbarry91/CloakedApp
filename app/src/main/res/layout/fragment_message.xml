@@ -23,7 +23,6 @@
 
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        android:onClick="viewSms"
         android:text="@string/view_sms" />
 
     <TextView
