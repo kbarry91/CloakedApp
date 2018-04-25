@@ -3,7 +3,6 @@ package kevcon.ie.cloaked;
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +18,7 @@ import static kevcon.ie.cloaked.Encryption.startDecrypt;
  * ContactsViewAdapter is a RecyclerView holder to bind a large data set of @Message objects to a limited view
  *
  * @author kevin barry
- * @since 15/3/2018
+ * @since 25/4/2018
  */
 public class MessageViewAdapter extends RecyclerView.Adapter {
     private Context ctx;
@@ -27,8 +26,8 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
     private Contacts contact;
 
 
-    //Constructor
-    public MessageViewAdapter(Context ctx, List<Message> listMessageData, Contacts contact) {
+    // Package Private Constructor
+    MessageViewAdapter(Context ctx, List<Message> listMessageData, Contacts contact) {
         this.ctx = ctx;
         this.listMessageData = listMessageData;
         this.contact = contact;
@@ -75,7 +74,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
         return null;
     }
 
-    // bind message object to viewholder
+    // bind message object to view holder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Message message = listMessageData.get(position);
@@ -89,7 +88,9 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-
+    /**
+     * messageOutHolder represents a sent message object. Extends ViewHolder to represent data in a large data set.
+     */
     private class messageOutHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
 
@@ -100,6 +101,11 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
             timeText = itemView.findViewById(R.id.text_message_time);
         }
 
+        /**
+         * bind binds the message data and methods to a view.
+         *
+         * @param message a message object to bind to view.
+         */
         void bind(Message message) {
             final String strMessage = message.getMessage();
             messageText.setText(message.getMessage());
@@ -121,17 +127,13 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
                                 case R.id.menu1:
-                                    Log.d("MENNNU", "onMenuItemClick:1 ");
                                     if (contact.getKeySet()) {
                                         startDecrypt(strMessage, contact, ctx);
-
                                     }
                                     break;
                                 case R.id.menu2:
-                                    Log.d("MENNNU", "onMenuItemClick:1 ");
                                     break;
                                 case R.id.menu3:
-                                    Log.d("MENNNU", "onMenuItemClick:1 ");
                                     break;
                             }
                             return false;
@@ -145,6 +147,9 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
         }
     }
 
+    /**
+     * messageInHolder represents a received message object. Extends ViewHolder to represent data in a large data set.
+     */
     private class messageInHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText, nameText;
 
@@ -157,6 +162,11 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
             nameText = itemView.findViewById(R.id.text_message_name);
         }
 
+        /**
+         * bind binds the message data and methods to a view.
+         *
+         * @param message a message object to bind to view.
+         */
         void bind(Message message) {
             final String strMessage = message.getMessage();
             messageText.setText(message.getMessage());
@@ -183,16 +193,13 @@ public class MessageViewAdapter extends RecyclerView.Adapter {
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
                                 case R.id.menu1:
-                                    Log.d("MENNNU", "onMenuItemClick:1 ");
                                     if (contact.getKeySet()) {
                                         startDecrypt(strMessage, contact, ctx);
                                     }
                                     break;
                                 case R.id.menu2:
-                                    Log.d("MENNNU", "onMenuItemClick:1 ");
                                     break;
                                 case R.id.menu3:
-                                    Log.d("MENNNU", "onMenuItemClick:1 ");
                                     break;
                             }
                             return false;
