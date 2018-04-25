@@ -34,7 +34,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,9 @@ import java.util.List;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
- * A login screen that offers login via email/password.
+ * A login activity that offers login via email/password.
+ * @author kevin barry
+ * @since 25/4/2018
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -53,10 +54,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_SMS = 0;
     private static final String TAG = "EmailPassword";
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    //private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -66,7 +63,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     // declared instance of firebase
     private FirebaseAuth mAuth;
-    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,11 +91,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
-                //if the user is successfully logged the main page is loaded
-                if (user != null) {
-                    //   Intent intent = new Intent(this, MainActivity.class);
 
-                }
             }
         });
 
@@ -107,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    public void openRegister(View view) {
+    public void openRegister() {
         // Do something in response to button
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
@@ -225,11 +217,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
 
-            //TODO: May need to reuse task again
-            //   mAuthTask = new UserLoginTask(email, password);
-            //  mAuthTask.execute((Void) null);
-
-
             if (ContextCompat.checkSelfPermission(LoginActivity.this, android.Manifest.permission.READ_SMS)
                     == PackageManager.PERMISSION_GRANTED || (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)) {
                 signIn(email, password);
@@ -239,7 +226,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 getPermissionToReadSMS();
             }
 
-            // signIn(email, password);
         }
     }
 
@@ -341,7 +327,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         };
 
         int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
     /**
@@ -360,7 +345,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             showProgress(false);
-                            FirebaseUser user = mAuth.getCurrentUser();
 
                             // display success
                             Toast.makeText(LoginActivity.this, "Log in Success", Toast.LENGTH_SHORT).show();
@@ -368,16 +352,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             // navigate user to MainActivity
                             Intent s = new Intent(getApplicationContext(), ContactsMainActivity.class);
                             startActivity(s);
-                            user = mAuth.getCurrentUser();
-                            //     updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             showProgress(false);
                             // display unsuccessful
                             Toast.makeText(LoginActivity.this, "Log in unsuccessful", Toast.LENGTH_SHORT).show();
-                            //         Toast.LENGTH_SHORT).show();
-                            // updateUI(null);
+
                         }
                     }
                 });
