@@ -8,27 +8,33 @@ import android.telephony.SmsMessage;
 import android.widget.Toast;
 
 /**
- * Created by Kevin Barry on 11/03/2018.
+ * <h1>ReceiveMessage</h1>
+ * ReceiveMessage is a class that accesses a received message.
+ * extends BroadcastReceiver to intercept broadcast intents.
+ *
+ * @author kevin barry
+ * @since 25/4/2018
  */
-
 public class ReceiveMessage extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle intentExtras = intent.getExtras();
 
         if (intentExtras != null) {
-            /* Get Messages */
+            // Get Messages.
             Object[] sms = (Object[]) intentExtras.get("pdus");
 
             for (int i = 0; i < sms.length; ++i) {
-                /* Parse Each Message */
+                // Parse Each Message.
                 SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) sms[i]);
 
                 String phone = smsMessage.getOriginatingAddress();
-                String message = smsMessage.getMessageBody().toString();
+                String message = smsMessage.getMessageBody();
 
-                // display toast notification to user
-                Toast.makeText(context, phone + ": " + message, Toast.LENGTH_SHORT).show();
+                // display toast notification to user only if a Cloaked message.
+                if (message.contains("Cloaked")) {
+                    Toast.makeText(context, phone + ": " + message, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
