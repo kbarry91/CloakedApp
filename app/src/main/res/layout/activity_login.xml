@@ -28,6 +28,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"
         android:src="@mipmap/ic_launcher_foreground" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/action_sign_in_short"
+        android:textColor="@color/colorAccent"
+        android:gravity="center_horizontal" />
+
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
