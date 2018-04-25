@@ -74,6 +74,7 @@
     <string name="sms_permission_denied">Sms permission request was denied.</string>
 
     <string name="resetCloakKey">Reset Cloaked Key</string>
+
     <!-- Country codes -->
     <string-array name="CountryCodes">
         <item>93,AF</item>

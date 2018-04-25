@@ -43,10 +43,10 @@
         <activity
             android:name=".SendMessageActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".ContactsMainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ContactsMainActivity" />
         </activity>
 
         <receiver
@@ -59,11 +59,6 @@
         </receiver>
 
 
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
         <activity
             android:name=".ContactsMainActivity"
             android:label="@string/title_activity_main"

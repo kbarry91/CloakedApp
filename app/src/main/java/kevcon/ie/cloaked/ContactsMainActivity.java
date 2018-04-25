@@ -34,7 +34,6 @@ public class ContactsMainActivity extends AppCompatActivity {
     private RecyclerView contactRec;
     private ContactsViewAdapter contactAdapter;
     private static final int READ_SMS_PERMISSIONS_REQUEST = 1;
-    //ContactsAdapter contactAdapter;
     Contacts contacts;
 
     //database variables
@@ -138,7 +137,6 @@ public class ContactsMainActivity extends AppCompatActivity {
         //listContacts = findViewById(R.id.listView);
 
 
-       //contactAdapter=new ContactsAdapter(ContactsMainActivity.this,contactList);
 
         //listContacts.setAdapter(contactAdapter);
 
