@@ -12,15 +12,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 /**
- * Encryption is a class that implements a Porta Cipher to encrypt a message
+ * <h1>Encryption</h1>
+ * Encryption is a class that implements a Porta Cipher to encrypt a message.
  *
  * @author kevin barry
+ * @since 25/4/2018
  */
-public class Encryption {
-    final static String DTAG = "DEBUGTAG";
-    static int keyLetter = 0;
-    public static final String[][] tableau = {
+class Encryption {
+
+    // tag for debugging
+    private final static String DTAG = "ENC_DEBUG:";
+    private static int keyLetter = 0;
+    private static final String[][] tableau = {
             {"KEYS", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
                     "T", "U", "V", "W", "X", "Y", "Z"},
             {"AB", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "A", "B", "C", "D", "E", "F", "G",
@@ -57,12 +62,14 @@ public class Encryption {
      * @param cipherKey The cipher key
      * @return The encrypted char
      */
-    public static char encrypt(char letter, String cipherKey) {
-        Log.d(DTAG, "-----keyletter    : " + keyLetter + "-");
-        int row = 0;
-        int col = 0;
+    private static char encrypt(char letter, String cipherKey) {
+        // DEBUG
+        Log.d(DTAG, "-----key letter    : " + keyLetter + "-");
 
-        // can remove this loop
+        int row = 0;
+        int col;
+
+        // can improve this loop
         if ((int) letter > 64 && (int) letter < 91) {
             for (int i = 1; i < 14; i++) {
                 if (tableau[i][0].indexOf(cipherKey.charAt(keyLetter)) >= 0) {
@@ -80,37 +87,37 @@ public class Encryption {
             }
             letter = tableau[row][col].charAt(0);
         }
-
-
         return letter;
     }// encrypt
 
     /**
-     * Parse the message char b y char to the cipher.
+     * Parse the message char by char to the cipher.
      *
      * @param message    The message to be encrypted
      * @param cloakedKey The encryption key
      * @return The encrypted message
      */
-    public static String DecryptMessage(String message, String cloakedKey) {
+    static String DecryptMessage(String message, String cloakedKey) {
         StringBuilder cloakedMessage = new StringBuilder();
 
-        //to send a message first an encryption key must be established
-        Log.d(DTAG, "-----Origonal Message : " + message + "-");
-        Log.d(DTAG, "-----Origonal Key     : " + cloakedKey + "-");
-        //
+        // DEBUG
+        Log.d(DTAG, "-----Original Message : " + message + "-");
+        Log.d(DTAG, "-----Original Key     : " + cloakedKey + "-");
+
         // start at 18 , first 18 chars are defaulted
         int pos = 18;
         int sentLength = message.length();
+        // DEBUG
         Log.d(DTAG, "-----Message length: " + (message.length() - 18) + "-");
+
         while (pos < sentLength) {// while end of sentence not reached
 
             char letter = encrypt(Character.toUpperCase(message.charAt(pos)), cloakedKey.toUpperCase());
-            Log.d(DTAG, "-----Before ENC     : " + Character.toUpperCase(message.charAt(pos)) + "-");
-            Log.d(DTAG, "-----After ENC      : " + letter + "-");
-            Log.d(DTAG, "-----cloak before    : " + cloakedMessage.toString() + "-");
             cloakedMessage.append(letter);
+
+            // DEBUG
             Log.d(DTAG, "-----cloak after     : " + cloakedMessage.toString() + "-");
+
             pos++;
         } // while
 
@@ -119,18 +126,23 @@ public class Encryption {
         return cloakedMessage.toString();
     }
 
-    // Method to verify key
-    public static void startDecrypt(final String messageText, final Contacts contact, final Context ctx) {
+    /**
+     * startDecrypt Displays a pop up window to enter a Cloaked key.
+     * If the key is valid the the message is decrypted ,decrypted message will be shown in view.
+     *
+     * @param messageText The message to be decrypted.
+     * @param contact     The contact relation.
+     */
+    static void startDecrypt(final String messageText, final Contacts contact, final Context ctx) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setTitle("Cloaked Key");
-        // I'm using fragment here so I'm using getView() to provide ViewGroup
-        // but you can provide here any other instance of ViewGroup from your Fragment / Activity
-        //  View viewInflated = LayoutInflater.from(ctx).inflate(R.layout.key_entry_dialog, (ViewGroup) findViewById(android.R.id.content), false);
+
         // Set up the input
         View viewInflated = LayoutInflater.from(ctx).inflate(R.layout.key_entry_dialog, null, false);
 
         final EditText input = viewInflated.findViewById(R.id.input);
+
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         builder.setView(viewInflated);
 
@@ -172,12 +184,10 @@ public class Encryption {
                     Toast.makeText(ctx, "Invalid key",
                             Toast.LENGTH_LONG).show();
                 }
-                Log.d("ENTERED KEYY in dialog", keyEntered);
+                Log.d("ENTERED KEY in dialog", keyEntered);
 
                 dialog.dismiss();
-
             }
-
         });
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
@@ -186,8 +196,6 @@ public class Encryption {
             }
         });
         builder.show();
-
-
     }
 
 }
