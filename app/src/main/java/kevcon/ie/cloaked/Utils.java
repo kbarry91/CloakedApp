@@ -14,17 +14,17 @@ import java.util.Date;
 
 /**
  * <h1>Utils</h1>
- * Utils is a class to hold generic methods
+ * Utils is a class to hold generic methods.
  *
  * @author kevin barry
- * @since 19/3/2018
+ * @since 25/4/2018
  */
 public class Utils {
-    // private static final String TAG = "MESSAGE_SEND";
+
     /**
-     * convertDate converts the date from time in milliseconds to MM/dd/yy hh:mm format
+     * convertDate converts the date from time in milliseconds to MM/dd/yy hh:mm format.
      *
-     * @return a formatted string date
+     * @return a formatted string date.
      */
     static String convertDate(String date) {
 
@@ -35,23 +35,25 @@ public class Utils {
     }
 
     /**
-     * addCountryCode removes the 0 from the number and appends country formating
+     * addCountryCode removes the 0 from the number and appends country formatting.
      */
     public static String addCountryCode(String countryCode, String number) {
 
-        String newNumber = number.replaceFirst("0", "+" + countryCode);
-        return newNumber;
+        return number.replaceFirst("0", "+" + countryCode);
     }
 
     //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
+
+    /**
+     * sendMessage sends a sms Message to a contact.
+     *
+     * @param testContact A Contact Object with the number to send to.
+     * @param message     The message to send.
+     * @param ctx         the Context of the view to return to.
+     */
     public static void sendMessage(Contacts testContact, String message, Context ctx) {
 
-
-        // Log.d(TAG, "Attempting to send sms");
-        //  String strMessage = "sent from cloaked app: " + user_message.getText().toString();
-
         SmsManager sms = SmsManager.getDefault();
-
 
         final Context thisContext = ctx;
 
@@ -110,74 +112,29 @@ public class Utils {
                 }, new IntentFilter("DELIVERED"));
 
         //send the message and set receivers
-        // sms.sendTextMessage(userNumber, null, strMessage, sentPending, deliveredPending);
         sms.sendTextMessage(testContact.getNumber(), null, "Please Open This In Cloaked:" + message, sentPending, deliveredPending);
         // display notification of message sent
         Toast.makeText(thisContext, "Sent", Toast.LENGTH_SHORT).show();
 
-        // create a new message object
-        //Message newMessage = new Message("Sent From Cloaked:" + message, testContact.getNumber(), Long.toString(System.currentTimeMillis()), 2);
-
-        // add the new message to the list
-        // listMessageData.add(newMessage);
-        // must notify adapter of changes to update message list
-        // messageAdp.notifyItemInserted(listMessageData.size() - 1);
-
-
-        //reset text field
-        //  user_message.setText(null);
-        // user_message.setHint(R.string.send_message_hint);
-
-
     }
 
-    /*
-       * Method to get country code for a number will be moved to add contact*/
-    /*
-    public static String GetCountryZipCode(Context ctx) {
-
-        String CountryID;
-        String CountryZipCode = "";
-
-        TelephonyManager manager = (TelephonyManager) this.getApplicationContext(Context.TELEPHONY_SERVICE);
-        //getNetworkCountryIso
-        CountryID = manager.getSimCountryIso().toUpperCase();
-        String[] rl = this.getResources().getStringArray(R.array.CountryCodes);
-
-        //optimised for loop
-        for (int i = 0, rlLength = rl.length; i < rlLength; i++) {
-            String aRl = rl[i];
-            String[] g = aRl.split(",");
-            if (g[1].trim().equals(CountryID.trim())) {
-                CountryZipCode = g[0];
-                break;
-            }
-        }
-        return CountryZipCode;
-    }
-
-*/
-
-    /*
-    * keyStringToHex takes in a key in byte form and converts it to a hexadecimal string
-    *
-    * @Returns the hex value of the byte array
-    * */
+    /**
+     * keyStringToHex takes in a key in byte form and converts it to a hexadecimal string.
+     */
     public static String keyStringToHex(byte[] ba) {
         StringBuilder str = new StringBuilder();
-        for(int i = 0; i < ba.length; i++)
-               str.append(String.format("%x", ba[i]));
+        for (byte aBa : ba) str.append(String.format("%x", aBa));
         return str.toString();
     }
 
-    /*
-     * hexKeyToString takes in a hexadecimal string and converts it to its original string value
+    /**
+     * hexKeyToString takes in a hexadecimal string and converts it to its original string value.
      *
-     * @Returns the string in normal form
-     * */
+     * @param hex A hexadecimal representation of a String.
+     */
     public static String hexKeyToString(String hex) {
         StringBuilder str = new StringBuilder();
-        for (int i = 0; i < hex.length(); i+=2) {
+        for (int i = 0; i < hex.length(); i += 2) {
             str.append((char) Integer.parseInt(hex.substring(i, i + 2), 16));
         }
         return str.toString();
