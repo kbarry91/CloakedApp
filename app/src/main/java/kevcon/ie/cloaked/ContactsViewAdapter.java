@@ -68,7 +68,7 @@ public class ContactsViewAdapter extends RecyclerView.Adapter {
             return new contactOutHolder(view);
         } else if (viewType == 1) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_keyset, parent, false);
+                    .inflate(R.layout.item_contact_keyset, parent, false);
             return new contactInHolder(view);
         }
 
