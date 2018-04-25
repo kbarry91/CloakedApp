@@ -31,16 +31,17 @@ import static android.app.AlertDialog.Builder;
 import static kevcon.ie.cloaked.Encryption.DecryptMessage;
 
 /**
- * <h1>SendMessage</h1>
- * SendMessage controls the sending and loading of sms messages
+ * <h1>SendMessageActivity</h1>
+ * SendMessageActivity is the main message page.
+ * Controls the sending and loading of sms messages
  *
  * @author kevin barry
+ * @since 25/4/2018
  */
-public class SendMessage extends AppCompatActivity {
+public class SendMessageActivity extends AppCompatActivity {
     // Tag for debugging
-    private static final String TAG = "SendMessage";
+    private static final String TAG = "SendMessageActivity";
     private static final String READMSG = "CREATE MESSAGE LIST:";
-    private static final String BRICK = "INBRICK>>>>>>>";
 
     // define UI Components
     private EditText user_message;
@@ -50,10 +51,8 @@ public class SendMessage extends AppCompatActivity {
     private MessageViewAdapter messageAdp;
 
     private List<Message> listMessageData;
-    // initialize contact
-    Contacts contact;
-    Contacts testContact;
 
+    private Contacts curContact;
 
     private String verifyEnteredKey;
 
@@ -66,50 +65,45 @@ public class SendMessage extends AppCompatActivity {
         // receive information through intent regarding the contact
         Intent intent;
         intent = getIntent();
-        this.testContact = (Contacts) intent.getSerializableExtra("send_msg");
+        this.curContact = (Contacts) intent.getSerializableExtra("send_msg");
 
         //populate message list first
-        this.listMessageData = createMessageList(testContact.getNumber());
+        this.listMessageData = createMessageList(curContact.getNumber());
 
         Runnable lookValidKey = new Runnable() {
             @Override
             public void run() {
                 // if key is not sent prompt a pop up to set key
-                if (!testContact.getKeySet()) {
-                    //   KeyController.setNewKey(testContact,getBaseContext());
+                if (!curContact.getKeySet()) {
                     Toast.makeText(getBaseContext(), "No key Set",
                             Toast.LENGTH_LONG).show();
                     KeyController kc = new KeyController();
-                    kc.setNewKey(testContact, SendMessage.this, "No Key Set,Set Cloaked Key");
+                    kc.setNewKey(curContact, SendMessageActivity.this, "No Key Set,Set Cloaked Key");
 
                 }
             }
         };
 
-
-        // Log.d(TAG, "onCreate: opened");
         setContentView(R.layout.activity_send_message);
 
         // set up a toolbar with contacts name and back button to parent activity
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        if (testContact.getName() != null) getSupportActionBar().setTitle(testContact.getName());
+        if (curContact.getName() != null) getSupportActionBar().setTitle(curContact.getName());
 
 
         //assign Recycle view to view
         messageRec = findViewById(R.id.recycler_view_inbox_list);
-        messageAdp = new MessageViewAdapter(this, listMessageData, testContact);
+        messageAdp = new MessageViewAdapter(this, listMessageData, curContact);
         messageRec.setLayoutManager(new LinearLayoutManager(this));
         messageRec.setAdapter(messageAdp);
-
-
-        //getSupportActionBar().setHomeButtonEnabled(true);
+        
         //assign user_message and button to view
-
         user_message = findViewById(R.id.edit_message);
         send_button = findViewById(R.id.button_sms_send);
-        String newKeySet = "";
+
+        String newKeySet;
         Message messageCheck = null;
         boolean found = false;
 
@@ -126,18 +120,17 @@ public class SendMessage extends AppCompatActivity {
                 }//if pattern is found
 
             }// for
+
             // decipher the key from the message
             if (messageCheck != null && found && messageCheck.getType() == 1) {
                 KeyController newKeySetter = new KeyController();
 
                 newKeySet = newKeySetter.unScrambleKey(messageCheck.getMessage());
-                if (!newKeySet.equals(testContact.getKey())) {
-                    Log.e(BRICK, "just  key didnt match: ");
+                if (!newKeySet.equals(curContact.getKey())) {
                     // reset the key for this contact
-                    if (newKeySetter.resetKey(newKeySet, testContact, this, lookValidKey)) {
-                        Log.e(BRICK, "just setting new key  ");
-                        testContact.setKey(newKeySet);
-                        testContact.setKeySet(true);
+                    if (newKeySetter.resetKey(newKeySet, curContact, this, lookValidKey)) {
+                        curContact.setKey(newKeySet);
+                        curContact.setKeySet(true);
                     }
                 }//if key set not equal new key
             }
@@ -146,49 +139,20 @@ public class SendMessage extends AppCompatActivity {
             lookValidKey.run();
         }
 
-/*
-        //  String newKeySet = "";
-        //if the list is not empty
-        if (listMessageData.size() > 0) {
-            //test if list contains a key set request
-            Message lastReceived = listMessageData.get(listMessageData.size() - 1);
-            if (lastReceived.toString().contains("Please Open This In Cloaked:") && lastReceived.getType() == 1) {
-                KeyController newKeySetter = new KeyController();
-                // decipher the key from the message
-                newKeySet = newKeySetter.unScrambleKey(lastReceived.getMessage());
-                if (!newKeySet.equals(testContact.getKey())) {
-                    Log.e(BRICK, "just  key didnt match: ");
-                    // reset the key for this contact
-                    if (newKeySetter.resetKey(newKeySet, testContact, this, lookValidKey)) {
-                        Log.e(BRICK, "just setting new key  ");
-                        testContact.setKey(newKeySet);
-                        testContact.setKeySet(true);
-                    }
-                }
-            } else {
-                lookValidKey.run();
-            }
-        } else {
-            lookValidKey.run();
-        }
-        */
-        Log.e(BRICK, "phhhhheeeeew  ");
-
-
         // assign on click listener to button
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //to send a message first an encryption key must be established
-                if (testContact.getKeySet()) {
+                if (curContact.getKeySet()) {
                     verifyKey();
 
                 } else {
-                    //   KeyController.setNewKey(testContact,getBaseContext());
+                    //   KeyController.setNewKey(curContact,getBaseContext());
                     Toast.makeText(getBaseContext(), "No key Set",
                             Toast.LENGTH_LONG).show();
                     KeyController kc = new KeyController();
-                    kc.setNewKey(testContact, SendMessage.this, "No Key Set,Set Cloaked Key");
+                    kc.setNewKey(curContact, SendMessageActivity.this, "No Key Set,Set Cloaked Key");
 
                 }
             }//on click
@@ -197,8 +161,13 @@ public class SendMessage extends AppCompatActivity {
 
     }
 
-    // a method to populate a list of messages
-    public List<Message> createMessageList(String userNumber) {
+    /**
+     * createMessageList populates a list of messages from the devices storage.
+     *
+     * @param userNumber The number for the contact to retrieve messages.
+     * @return messageList a list of messages.
+     */
+    private List<Message> createMessageList(String userNumber) {
         List<Message> messageList = new ArrayList<>();
         String numberString = "address='" + userNumber + "'";
         Message message;
@@ -207,8 +176,7 @@ public class SendMessage extends AppCompatActivity {
         String dateTime = "";
         String type = "";
 
-        // DEBUG
-        String msgInfo = "";
+        StringBuilder msgInfo = new StringBuilder();
         //get read access to message data
         Cursor cur = getContentResolver().query(Uri.parse("content://sms/"), null, numberString, null, null);
 
@@ -217,24 +185,25 @@ public class SendMessage extends AppCompatActivity {
             do {
 
                 for (int i = 0; i < cur.getColumnCount(); i++) {
-                    msgInfo += " " + cur.getColumnName(i) + ":" + cur.getString(i); /// KEEP THIS LINE FOR DEBUG
+                    msgInfo.append(" ").append(cur.getColumnName(i)).append(":").append(cur.getString(i)); /// KEEP THIS LINE FOR DEBUG
                     number = cur.getString(cur.getColumnIndexOrThrow("address"));
                     body = cur.getString(cur.getColumnIndexOrThrow("body"));
                     dateTime = cur.getString(cur.getColumnIndexOrThrow("date"));
                     type = cur.getString(cur.getColumnIndexOrThrow("type"));
                 }
-                //convert type to int
+
+                // Convert type to int.
                 int messageType = 0;
                 if (type.equals("2")) {
                     messageType = 2;
                 } else if (type.equals("1")) {
                     messageType = 1;
                 }
-                Log.d("MSG FROM PHONE", msgInfo);
+
                 //create a message object
                 message = new Message(body, number, dateTime, messageType);
 
-                //add message to message list
+                //add message to message list.
                 messageList.add(message);
 
                 //DEBUG
@@ -257,10 +226,15 @@ public class SendMessage extends AppCompatActivity {
         return messageList;
     }
 
-    public void keyChecker(String entKey) {
-        if (entKey.equals(testContact.getKey())) {
+    /**
+     * keyChecker checks if key is correct, if true sends a message
+     *
+     * @param entKey the user entered key.
+     */
+    private void keyChecker(String entKey) {
+        if (entKey.equals(curContact.getKey())) {
             Log.d("Valid key", "key confirmed");
-            sendSms(testContact);
+            sendSms(curContact);
 
         } else {
             Toast.makeText(getBaseContext(), "Invalid Cloaked key",
@@ -268,16 +242,19 @@ public class SendMessage extends AppCompatActivity {
         }
     }
 
-    public void verifyKey() {
+    /**
+     * verifyKey displays a pop up dialog to allow user to enter a key
+     */
+    private void verifyKey() {
         verifyEnteredKey = "";
-        Builder builder = new Builder(SendMessage.this);
+        Builder builder = new Builder(SendMessageActivity.this);
         builder.setTitle("Cloaked Key");
-        // I'm using fragment here so I'm using getView() to provide ViewGroup
-        // but you can provide here any other instance of ViewGroup from your Fragment / Activity
-        View viewInflated = LayoutInflater.from(SendMessage.this).inflate(R.layout.key_entry_dialog, (ViewGroup) findViewById(android.R.id.content), false);
-        // Set up the input
+
+        // Inflate the key dialog view.
+        View viewInflated = LayoutInflater.from(SendMessageActivity.this).inflate(R.layout.key_entry_dialog, (ViewGroup) findViewById(android.R.id.content), false);
+        // Set up the input.
         final EditText input = viewInflated.findViewById(R.id.input);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        // Specify the type of input expected.
         builder.setView(viewInflated);
 
         // Set up the buttons
@@ -285,14 +262,11 @@ public class SendMessage extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 verifyEnteredKey = input.getText().toString();
-                Log.d("ENTERED KEYY in dialog", verifyEnteredKey);
-                // if(verifyEnteredKey.equals(testContact.getKey())){
-                //    return true;
-                // }
+
+                // verify if key is valid.
                 keyChecker(verifyEnteredKey);
-                Log.d("Before dialog dismiss", verifyEnteredKey);
+
                 dialog.dismiss();
-                Log.d("afteer dialog dismiss", verifyEnteredKey);
 
             }
 
@@ -310,18 +284,21 @@ public class SendMessage extends AppCompatActivity {
 
     }
 
-    //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
-    public void sendSms(Contacts testContact) {
-// a test message to try encryption
+    /**
+     * sendSms sends a message to the specified contact
+     *
+     * @param curContact the contact to send message to.
+     */
+    private void sendSms(Contacts curContact) {
+        // a test message to try encryption
         String testMessage = "Sent From Cloaked:" + user_message.getText().toString();
 
-        String cloakedMessage = DecryptMessage(testMessage, testContact.getKey());
+        String cloakedMessage = DecryptMessage(testMessage, curContact.getKey());
 
+        // DEBUG
         Log.d(TAG, "Attempting to send sms");
-        //  String strMessage = "sent from cloaked app: " + user_message.getText().toString();
 
         SmsManager sms = SmsManager.getDefault();
-
 
         Context curContext = this.getApplicationContext();
 
@@ -379,14 +356,14 @@ public class SendMessage extends AppCompatActivity {
                     }
                 }, new IntentFilter("DELIVERED"));
 
-        //send the message and set receivers
-        // sms.sendTextMessage(userNumber, null, strMessage, sentPending, deliveredPending);
-        sms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + cloakedMessage, sentPending, deliveredPending);
+        // send the message and set receivers.
+        sms.sendTextMessage(curContact.getNumber(), null, "Sent From Cloaked:" + cloakedMessage, sentPending, deliveredPending);
+
         // display notification of message sent
         Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
 
         // create a new message object
-        Message newMessage = new Message("Sent From Cloaked:" + cloakedMessage, testContact.getNumber(), Long.toString(System.currentTimeMillis()), 2);
+        Message newMessage = new Message("Sent From Cloaked:" + cloakedMessage, curContact.getNumber(), Long.toString(System.currentTimeMillis()), 2);
 
         // add the new message to the list
         listMessageData.add(newMessage);

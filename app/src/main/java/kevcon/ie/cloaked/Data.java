@@ -204,7 +204,7 @@ public class Data extends Activity {
 
     /*
         //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
-        public void sendInitialMsg(final Contacts testContact, String txtMsg) {
+        public void sendInitialMsg(final Contacts curContact, String txtMsg) {
 
             SmsManager mySms = SmsManager.getDefault();
 
@@ -221,7 +221,7 @@ public class Data extends Activity {
                     switch (getResultCode()) {
                         case Activity.RESULT_OK:
 
-                            Toast.makeText(getBaseContext(), "Sending request to " + testContact.getName() + " to download Cloaked",
+                            Toast.makeText(getBaseContext(), "Sending request to " + curContact.getName() + " to download Cloaked",
                                     Toast.LENGTH_LONG).show();
                             break;
                         case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
@@ -264,7 +264,7 @@ public class Data extends Activity {
                         }
                     }, new IntentFilter("DELIVERED"));
 
-            mySms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + txtMsg, sentPending, deliveredPending);
+            mySms.sendTextMessage(curContact.getNumber(), null, "Sent From Cloaked:" + txtMsg, sentPending, deliveredPending);
 
             unregisterReceiver(deliveredPending);
 

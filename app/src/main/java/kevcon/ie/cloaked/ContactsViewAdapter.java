@@ -145,13 +145,13 @@ public class ContactsViewAdapter extends RecyclerView.Adapter {
                                     break;
                                 case R.id.option3:
 
-                                    Intent intent2 = new Intent(ctx, SendMessage.class);
+                                    Intent intent2 = new Intent(ctx, SendMessageActivity.class);
                                     intent2.putExtra("send_msg", contact);
                                     ctx.startActivity(intent2);
 
 
                                     break;
-                                //   Intent intent2 = new Intent(ctx, SendMessage.class);
+                                //   Intent intent2 = new Intent(ctx, SendMessageActivity.class);
                                 //     intent2.putExtra("send_msg", contact);
                                 //   ctx.startActivity(intent2);
                                 //   break;
@@ -233,13 +233,13 @@ public class ContactsViewAdapter extends RecyclerView.Adapter {
 
 
                                     } else {
-                                        Intent intent2 = new Intent(ctx, SendMessage.class);
+                                        Intent intent2 = new Intent(ctx, SendMessageActivity.class);
                                         intent2.putExtra("send_msg", contact);
                                         ctx.startActivity(intent2);
 
                                     }
                                     break;
-                                //   Intent intent2 = new Intent(ctx, SendMessage.class);
+                                //   Intent intent2 = new Intent(ctx, SendMessageActivity.class);
                                 //     intent2.putExtra("send_msg", contact);
                                 //   ctx.startActivity(intent2);
                                 //   break;

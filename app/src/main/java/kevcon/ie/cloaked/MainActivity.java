@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void openMessages(View view) {
         // Do something in response to button
-        Intent intent = new Intent(this, SendMessage.class);
+        Intent intent = new Intent(this, SendMessageActivity.class);
         startActivity(intent);
     }
 /*
