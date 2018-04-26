@@ -111,7 +111,7 @@ public class KeyController extends Activity {
      * @param contact The Contact object the key is to be set for.
      * @return a key set String
      */
-    private String scrambleKey(Contacts contact) {
+    public String scrambleKey(Contacts contact) {
         StringBuilder scrambledKey = new StringBuilder();
 
         String org = contact.getKey();

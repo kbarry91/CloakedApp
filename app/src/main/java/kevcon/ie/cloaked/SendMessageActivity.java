@@ -167,7 +167,7 @@ public class SendMessageActivity extends AppCompatActivity {
      * @param userNumber The number for the contact to retrieve messages.
      * @return messageList a list of messages.
      */
-    private List<Message> createMessageList(String userNumber) {
+    public List<Message> createMessageList(String userNumber) {
         List<Message> messageList = new ArrayList<>();
         String numberString = "address='" + userNumber + "'";
         Message message;
@@ -231,7 +231,7 @@ public class SendMessageActivity extends AppCompatActivity {
      *
      * @param entKey the user entered key.
      */
-    private void keyChecker(String entKey) {
+    public void keyChecker(String entKey) {
         if (entKey.equals(curContact.getKey())) {
             Log.d("Valid key", "key confirmed");
             sendSms(curContact);
@@ -245,7 +245,7 @@ public class SendMessageActivity extends AppCompatActivity {
     /**
      * verifyKey displays a pop up dialog to allow user to enter a key
      */
-    private void verifyKey() {
+    public void verifyKey() {
         verifyEnteredKey = "";
         Builder builder = new Builder(SendMessageActivity.this);
         builder.setTitle("Cloaked Key");
@@ -289,7 +289,7 @@ public class SendMessageActivity extends AppCompatActivity {
      *
      * @param curContact the contact to send message to.
      */
-    private void sendSms(Contacts curContact) {
+    public void sendSms(Contacts curContact) {
         // a test message to try encryption
         String testMessage = "Sent From Cloaked:" + user_message.getText().toString();
 
