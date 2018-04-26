@@ -24,8 +24,6 @@
         android:contentDescription="@string/img_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"
         android:src="@mipmap/ic_launcher_foreground" />
 
@@ -95,7 +93,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:onClick="openRegister"
                 android:text="@string/action_register"
                 android:textStyle="bold" />
 
