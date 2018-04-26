@@ -20,7 +20,7 @@ import android.widget.Toast;
  * @author kevin barry
  * @since 25/4/2018
  */
-class Encryption {
+public class Encryption {
 
     // tag for debugging
     private final static String DTAG = "ENC_DEBUG:";
@@ -62,7 +62,7 @@ class Encryption {
      * @param cipherKey The cipher key
      * @return The encrypted char
      */
-    private static char encrypt(char letter, String cipherKey) {
+    public static char encrypt(char letter, String cipherKey) {
         // DEBUG
         Log.d(DTAG, "-----key letter    : " + keyLetter + "-");
 
@@ -97,7 +97,7 @@ class Encryption {
      * @param cloakedKey The encryption key
      * @return The encrypted message
      */
-    static String DecryptMessage(String message, String cloakedKey) {
+    public static String DecryptMessage(String message, String cloakedKey) {
         StringBuilder cloakedMessage = new StringBuilder();
 
         // DEBUG
@@ -133,7 +133,7 @@ class Encryption {
      * @param messageText The message to be decrypted.
      * @param contact     The contact relation.
      */
-    static void startDecrypt(final String messageText, final Contacts contact, final Context ctx) {
+    public static void startDecrypt(final String messageText, final Contacts contact, final Context ctx) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setTitle("Cloaked Key");
