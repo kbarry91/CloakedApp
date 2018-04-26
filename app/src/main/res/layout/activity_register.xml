@@ -21,7 +21,6 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:contentDescription="@string/img_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -31,9 +30,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:text="@string/action_register"
-        android:textColor="@color/colorAccent"
-        android:gravity="center_horizontal" />
+        android:textColor="@color/colorAccent" />
+
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"

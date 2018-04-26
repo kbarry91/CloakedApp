@@ -42,6 +42,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login activity that offers login via email/password.
+ *
  * @author kevin barry
  * @since 25/4/2018
  */
@@ -60,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
+    private Button regButton;
     // declared instance of firebase
     private FirebaseAuth mAuth;
 
@@ -86,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
-
+        regButton = findViewById(R.id.email_register_button);
         Button mEmailSignInButton = findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -96,6 +97,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        // set button for register
+        regButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openRegister();
+            }
+        });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
