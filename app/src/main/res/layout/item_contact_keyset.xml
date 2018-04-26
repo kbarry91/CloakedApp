@@ -15,12 +15,10 @@
     android:id="@+id/contact_list_item">
 
     <TextView
-
         android:id="@+id/contact_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-
         android:text="@string/details_name"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textColor="@color/colorAccent"

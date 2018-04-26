@@ -53,7 +53,9 @@
     <string name="set_key">Set a new key</string>
     <string name="confirm_key">Confirm</string>
     <string name="refuse_key">Refuse</string>
+    <!--Message-->
 
+    <string name="user_profile_image">User Icon</string>
     <!-- Message pop up-->
     <string name="okOption"> OK </string>
     <!-- Message Menu-->
