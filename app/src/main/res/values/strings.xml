@@ -74,6 +74,8 @@
     <string name="sms_permission_denied">Sms permission request was denied.</string>
 
     <string name="resetCloakKey">Reset Cloaked Key</string>
+    <string name="add_contact_title">ADD NEW CLOAKED CONTACT</string>
+    <string name="view_cloaked_contact">VIEW CLOAKED CONTACT</string>
 
     <!-- Country codes -->
     <string-array name="CountryCodes">

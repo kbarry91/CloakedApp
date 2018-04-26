@@ -52,7 +52,7 @@ public class ContactsMainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
-        getSupportActionBar().setTitle("Contacts");
+        getSupportActionBar().setTitle("CLOAKED CONTACTS");
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
