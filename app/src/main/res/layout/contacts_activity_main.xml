@@ -25,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <!-- Might remove to suit api level-->
         <android.support.v7.widget.Toolbar
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
@@ -36,13 +35,13 @@
 
             <ImageView
 
-
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/img_desc"
                 android:foregroundGravity="right"
                 android:src="@mipmap/ic_launcher_foreground" />
+
         </android.support.v7.widget.Toolbar>
         <Button
             android:id="@+id/button_add_contact"
@@ -64,14 +63,12 @@
             app:layout_constraintStart_toStartOf="parent"
             />
 
-
             <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_contact_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/mView"
             app:layout_constraintTop_toBottomOf="@id/my_toolbar"
-
             />
 
         </android.support.constraint.ConstraintLayout>
