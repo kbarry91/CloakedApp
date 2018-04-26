@@ -73,7 +73,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editName" />
 
-
     <Button
         android:id="@+id/save"
         android:layout_width="wrap_content"
@@ -92,86 +91,4 @@
         app:layout_constraintTop_toBottomOf="@+id/editNumber"
         app:layout_constraintVertical_bias="0.111" />
 
-
 </android.support.constraint.ConstraintLayout>
-
-
-    <!--
-
-
-
-
-
-
-    <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/linearData">
-
-        <ImageView
-            android:id="@+id/ContactImage"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_alignEnd="@+id/save"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/save"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/contact_img"
-            android:src="@drawable/default_avatar" />
-
-        <EditText
-            android:id="@+id/editName"
-            android:layout_width="294dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:hint="@string/register_fullname"
-            android:inputType="text"
-            android:textColorHint="#ff84eb"
-            android:textSize="24sp" />
-
-        <EditText
-            android:id="@+id/editNumber"
-            android:layout_width="296dp"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/editEmail"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:hint="@string/phone_number"
-            android:inputType="number"
-            android:textColorHint="#ff9cda"
-            android:textSize="24sp" />
-
-        <EditText
-            android:id="@+id/editEmail"
-            android:layout_width="297dp"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/save"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:hint="@string/register_email"
-            android:inputType="textEmailAddress"
-            android:textColorHint="#ff96ea"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/save"
-            android:layout_width="171dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="86dp"
-            android:background="#000000"
-            android:textColor="#ff0009"
-            android:textStyle="bold"
-            tools:text="@string/submit_registration" />
-
-
-    </RelativeLayout>
-
-    -->

@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="kevcon.ie.cloaked.LoginActivity">
 
-    <!-- Login progress -->
+    <!-- Register progress -->
     <ProgressBar
         android:id="@+id/login_progress"
         style="?android:attr/progressBarStyleLarge"
@@ -24,7 +24,6 @@
         android:contentDescription="@string/img_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"
         android:src="@mipmap/ic_launcher_foreground" />

@@ -3,17 +3,23 @@ package kevcon.ie.cloaked;
 import java.io.Serializable;
 
 /**
- * Created by c-raf on 08/03/2018.
+ * <h1>Contacts</h1>
+ * This class is used to get & set details about each contact.
+ * It contains variables, constructors, getters & setters, along with
+ * a toString method.
+ *
+ * @author Conor Raftery
+ * @since 08/03/2018
  */
-
 public class Contacts implements Serializable{
 
+    //Member Variables
     private String mName;
     private String mNumber;
     private String key;
     private boolean isKeySet;
 
-
+    //Constructor
     public Contacts(String name, String number, String key, boolean isKeySet) {
         this.mName = name;
         this.mNumber = number;
@@ -21,13 +27,18 @@ public class Contacts implements Serializable{
         this.key = key;
     }
 
-
+    //Constructor
     public Contacts(String name, String number) {
         this.mName = name;
         this.mNumber = number;
         this.isKeySet = false;
         this.key = null;
     }
+
+    //
+    //ToString, Getters & Setters methods below here
+    //
+
     public String getName() {
 
         return mName;
