@@ -3,18 +3,12 @@ package kevcon.ie.cloaked;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 /**
- * Created by c-raf on 08/03/2018.
+ * Created by Conor Raftery on 08/03/2018.
  */
 
 public class ContactDetails extends Activity {

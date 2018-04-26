@@ -18,18 +18,16 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.List;
 
 /**
- * Created by c-raf on 08/03/2018.
+ * Created by Conor Raftery on 08/03/2018.
  */
 
 public class ContactsMainActivity extends AppCompatActivity {
     Button contactAddButton;
-    ListView listContacts;
 
     private RecyclerView contactRec;
     private ContactsViewAdapter contactAdapter;
@@ -55,10 +53,6 @@ public class ContactsMainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("CLOAKED CONTACTS");
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
-
-        //SearchView search = (SearchView) item.getActionView();
-        //search.setLayoutParams(new ActionBar.LayoutParams(Gravity.RIGHT));
-
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
@@ -130,15 +124,6 @@ public class ContactsMainActivity extends AppCompatActivity {
 
             }
         });
-
-
-       // arrayListContact=new ArrayList<Contacts>();
-
-        //listContacts = findViewById(R.id.listView);
-
-
-
-        //listContacts.setAdapter(contactAdapter);
 
 
         contactAdapter = new ContactsViewAdapter(this, contactList);

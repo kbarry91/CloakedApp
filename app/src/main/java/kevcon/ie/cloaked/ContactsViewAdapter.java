@@ -25,12 +25,8 @@ import java.util.List;
 public class ContactsViewAdapter extends RecyclerView.Adapter {
 
 
-    private static final int READ_SMS_PERMISSIONS_REQUEST = 1;
-
     private Context ctx;
     private List<Contacts> listContacts;
-    private ContactsMainActivity cma;
-
 
 
     //Constructor
@@ -151,10 +147,6 @@ public class ContactsViewAdapter extends RecyclerView.Adapter {
 
 
                                     break;
-                                //   Intent intent2 = new Intent(ctx, SendMessageActivity.class);
-                                //     intent2.putExtra("send_msg", contact);
-                                //   ctx.startActivity(intent2);
-                                //   break;
                             }
                             return false;
                         }
@@ -178,7 +170,7 @@ public class ContactsViewAdapter extends RecyclerView.Adapter {
         }
 
         void bind(final Contacts contact) {
-           // final String strMessage = contact.getName();
+
             contactName.setText(contact.getName());
 
 
@@ -239,10 +231,7 @@ public class ContactsViewAdapter extends RecyclerView.Adapter {
 
                                     }
                                     break;
-                                //   Intent intent2 = new Intent(ctx, SendMessageActivity.class);
-                                //     intent2.putExtra("send_msg", contact);
-                                //   ctx.startActivity(intent2);
-                                //   break;
+
                                 case R.id.option4:
                                     KeyController kc = new KeyController();
                                     kc.setNewKey(contact, ctx, "Reset Cloaked Key");

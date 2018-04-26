@@ -8,23 +8,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by conor on 27/03/2018.
+ * Created by Conor Raftery on 27/03/2018.
  */
 
 public class ContactsHelperDB extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "cloaked.db";
     public static final String CONTACTS_TABLE_NAME = "contacts";
-
     public static final String CONTACTS_COLUMN_NAME = "name";
     public static final String CONTACTS_COLUMN_PHONE = "phone";
     public static final String CONTACTS_COLUMN_KEY = "cKey";
     public static final String CONTACTS_COLUMN_ISKEYSET = "isKeySet";
-    private HashMap hp;
 
     public ContactsHelperDB(Context context) {
         super(context, DATABASE_NAME , null, 1);
@@ -35,9 +32,6 @@ public class ContactsHelperDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
 
-        // String createContactTable="CREATE TABLE "+ CONTACTS_TABLE_NAME+"("+CONTACTS_COLUMN_NAME+" TEXT PRIMARY KEY,"+CONTACTS_COLUMN_PHONE+" TEXT,"+CONTACTS_COLUMN_KEY+" TEXT,"+CONTACTS_COLUMN_ISKEYSET+" INT"+")";
-
-        //  db.execSQL(createContactTable);
 
         db.execSQL(
                 "create table contacts " +
@@ -118,26 +112,20 @@ public class ContactsHelperDB extends SQLiteOpenHelper {
         List<Contacts> contactList = new ArrayList<>();
 
         Contacts contact;
-
         String name;
         String phone;
         String cKey;
         Boolean isKeySet;
 
-        //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from contacts", null );
         res.moveToFirst();
-
-        while(res.isAfterLast() == false){
-
-
-            //array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
+        res.close();
+//res.isAfterLast() == false
+        while(!res.isAfterLast()){
             name = res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME));
             phone = res.getString(res.getColumnIndex(CONTACTS_COLUMN_PHONE));
             cKey = res.getString(res.getColumnIndex(CONTACTS_COLUMN_KEY));
-            // might have to change
-            //isKeySet = res.getInt(res.getColumnIndex(CONTACTS_COLUMN_ISKEYSET)) > 0;
             isKeySet = res.getInt(res.getColumnIndex(CONTACTS_COLUMN_ISKEYSET)) == 1;
             res.moveToNext();
             contact = new Contacts(name, phone, cKey, isKeySet);

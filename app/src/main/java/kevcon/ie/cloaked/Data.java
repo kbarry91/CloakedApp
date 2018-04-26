@@ -18,14 +18,12 @@ import android.widget.Toast;
 import java.util.List;
 
 /**
- * Created by c-raf on 08/03/2018.
+ * Created by Conor Raftery on 08/03/2018.
  */
 
 public class Data extends Activity {
 
     EditText editName, editNumber;
-    String key = null;
-    boolean isKeySet = false;
     Button saveButton;
     ContactsHelperDB myDb;
 
@@ -35,11 +33,11 @@ public class Data extends Activity {
     String SENT = "SMS_SENT";
     String DELIVERED = "SMS_DELIVERED";
 
-    //ContactsHelperDB myDb2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.data);
+
         // set recievers when page loaded
         sendBroadcastReceiver = new BroadcastReceiver() {
 
@@ -82,9 +80,6 @@ public class Data extends Activity {
 
         //initlise database
         myDb = new ContactsHelperDB(this);
-        // myDb2 = new ContactsHelperDB(this);
-        //  myDb2.close();
-        // Log.d("IN PAAAAAGE", "MYDBJUST CLOSED------------- ");
 
         // bind elements to variables
         editName = findViewById(R.id.editName);
@@ -126,10 +121,7 @@ public class Data extends Activity {
                     // if the entered number does not contain country code must edit the number
                     if (!contactNumber.startsWith("+")) {
                         //test getting country code
-                        //  cc = GetCountryZipCode();
                         editedNumber = Utils.addCountryCode(cc, contactNumber);
-
-                        Log.d("COUNTRY CHECK", "DEBUG number  is : " + editedNumber + " cc:" + cc);
                     }
 
 
@@ -152,10 +144,6 @@ public class Data extends Activity {
 
                 }//Close dont add if
 
-
-                Intent intent5 = new Intent(Data.this, ContactsMainActivity.class);
-
-
                 finish();
             }
         });
@@ -163,7 +151,9 @@ public class Data extends Activity {
     }
 
     /*
-     * Method to get country code for a number will be moved to add contact*/
+     * Method to get country code for a number will be moved to add contact
+     *
+     */
     public String GetCountryZipCode() {
 
         String CountryID;
@@ -202,75 +192,7 @@ public class Data extends Activity {
         sms.sendTextMessage(testContact.getNumber(), null, "Sent From Cloaked:" + message, sentPI, deliveredPI);
     }
 
-    /*
-        //https://www.codeproject.com/Articles/1044639/Android-Java-How-To-Send-SMS-Receive-SMS-Get-SMS-M
-        public void sendInitialMsg(final Contacts curContact, String txtMsg) {
 
-            SmsManager mySms = SmsManager.getDefault();
-
-            Context curContext = Data.this;
-
-            // must create intents to Check if sms is sent and delivered
-            PendingIntent sentPending = PendingIntent.getBroadcast(curContext,
-                    0, new Intent("SENT"), 0);
-
-            // receiver intent to return result of  Broadcast
-            curContext.registerReceiver(new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context arg0, Intent arg1) {
-                    switch (getResultCode()) {
-                        case Activity.RESULT_OK:
-
-                            Toast.makeText(getBaseContext(), "Sending request to " + curContact.getName() + " to download Cloaked",
-                                    Toast.LENGTH_LONG).show();
-                            break;
-                        case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                            Toast.makeText(getBaseContext(), "request Not Sent: Generic failure.",
-                                    Toast.LENGTH_LONG).show();
-                            break;
-                        case SmsManager.RESULT_ERROR_NO_SERVICE:
-                            Toast.makeText(getBaseContext(), "SMS Not Sent: No service ",
-                                    Toast.LENGTH_LONG).show();
-                            break;
-                        case SmsManager.RESULT_ERROR_NULL_PDU:
-                            Toast.makeText(getBaseContext(), "Not Sent: Null PDU.",
-                                    Toast.LENGTH_LONG).show();
-                            break;
-                        case SmsManager.RESULT_ERROR_RADIO_OFF:
-                            Toast.makeText(getBaseContext(), "Not Sent: Ensure Airplane mode is disabled",
-                                    Toast.LENGTH_LONG).show();
-                            break;
-                    }
-                }
-            }, new IntentFilter("SENT"));
-
-            PendingIntent deliveredPending = PendingIntent.getBroadcast(curContext,
-                    0, new Intent("DELIVERED"), 0);
-
-            curContext.registerReceiver(
-                    new BroadcastReceiver() {
-                        @Override
-                        public void onReceive(Context arg0, Intent arg1) {
-                            switch (getResultCode()) {
-                                case Activity.RESULT_OK:
-                                    Toast.makeText(getBaseContext(), "Delivered.",
-                                            Toast.LENGTH_LONG).show();
-                                    break;
-                                case Activity.RESULT_CANCELED:
-                                    Toast.makeText(getBaseContext(), "Not Delivered: Canceled.",
-                                            Toast.LENGTH_LONG).show();
-                                    break;
-                            }
-                        }
-                    }, new IntentFilter("DELIVERED"));
-
-            mySms.sendTextMessage(curContact.getNumber(), null, "Sent From Cloaked:" + txtMsg, sentPending, deliveredPending);
-
-            unregisterReceiver(deliveredPending);
-
-
-        }
-        */
     @Override
     protected void onStop() {
         unregisterReceiver(sendBroadcastReceiver);
