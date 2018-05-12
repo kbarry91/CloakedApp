@@ -8,8 +8,8 @@
             android:id="@+id/nav_gallery"
             android:title="gallery" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:title="slideshow" />
+            android:id="@+id/menu_notes_option"
+            android:title="@string/my_cloaked_notes" />
         <item
             android:id="@+id/nav_manage"
             android:title="tools" />

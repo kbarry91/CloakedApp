@@ -78,6 +78,7 @@
     <string name="resetCloakKey">Reset Cloaked Key</string>
     <string name="add_contact_title">ADD NEW CLOAKED CONTACT</string>
     <string name="view_cloaked_contact">VIEW CLOAKED CONTACT</string>
+    <string name="my_cloaked_notes">My Cloaked Notes</string>
 
     <!-- Country codes -->
     <string-array name="CountryCodes">

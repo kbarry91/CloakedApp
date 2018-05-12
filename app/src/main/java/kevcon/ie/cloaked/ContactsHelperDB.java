@@ -144,7 +144,7 @@ public class ContactsHelperDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from contacts", null );
         res.moveToFirst();
-        res.close();
+
 
         while(!res.isAfterLast()){
             name = res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME));
@@ -155,6 +155,7 @@ public class ContactsHelperDB extends SQLiteOpenHelper {
             contact = new Contacts(name, phone, cKey, isKeySet);
             contactList.add(contact);
         }
+        res.close();
         db.close();
         return contactList;
     }

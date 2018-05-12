@@ -102,16 +102,29 @@ public class ContactsMainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
+                    //private MenuItem menuItem;
+
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
+                       // this.menuItem = menuItem;
+                        Log.d("MenuItemMain", "item selected");
+
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
-                        mDrawerLayout.closeDrawers();
 
+                        Log.d("MenuItemMain", "item selected");
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
+                        switch (menuItem.getItemId()) {
+                            case R.id.menu_notes_option:
+                                Log.d("MenuItem", "item selected");
+                                Toast.makeText(getBaseContext(), "Opening Menu Option:"+menuItem.getItemId(),
+                                        Toast.LENGTH_LONG).show();
+                                break;
 
+                        }
+                        mDrawerLayout.closeDrawers();
                         return true;
                     }
                 });

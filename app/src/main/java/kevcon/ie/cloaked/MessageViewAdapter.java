@@ -14,8 +14,8 @@ import java.util.List;
 import static kevcon.ie.cloaked.Encryption.startDecrypt;
 
 /**
- * <h1>ContactsViewAdapter</h1>
- * ContactsViewAdapter is a RecyclerView holder to bind a large data set of @Message objects to a limited view
+ * <h1>MessageViewAdapter</h1>
+ * MessageViewAdapter is a RecyclerView holder to bind a large data set of @Message objects to a limited view
  *
  * @author kevin barry
  * @since 25/4/2018
